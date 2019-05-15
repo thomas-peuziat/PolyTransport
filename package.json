@@ -9,10 +9,11 @@
     "express-session": "^1.16.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "sqlite3": "^4.0.6"
+    "sqlite3": "^4.0.6",
+    "nodemon": "^1.11.0"
   },
   "scripts": {
     "createDB": "sqlite3 PolyTransport.db < createDB.sql",
-    "start": "nodemon server.js"
+    "start": "node ./node_modules/nodemon/bin/nodemon.js --exec node server.js"
   }
 }
