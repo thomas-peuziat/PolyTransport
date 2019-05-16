@@ -31,16 +31,20 @@
         <span class="navbar-brand">Salut</span>
     </nav>
 
+<!--    TODO :  Faire les templates mustache -->
+    {{>upper-div}}
+    {{>main}}
+    {{>bottom-nav}}
     <main>
         <div>
             <p>BLABLABLA</p>
         </div>
     </main>
 
-    <nav class="container-fluid navbar fixed-bottom navbar-light bg-light border-top">
-        <a href="#">Truc 1</a>
-        <a href="#">Truc 2</a>
-        <a href="#">Truc 3</a>
+    <nav id="bottom-nav" class="container-fluid navbar fixed-bottom navbar-light bg-light border-top justify-content-around">
+        <a href="#"><img src="img/outline-map-24px.svg" alt="outline-map"></a>
+        <a href="#"><img src="img/outline-account_circle-24px.svg" alt="outline-account_circle"></a>
+        <a href="#"><img src="img/outline-chat-24px.svg" alt="outline-chat"></a>
     </nav>
 </div>
 
