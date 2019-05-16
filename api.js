@@ -17,7 +17,7 @@ module.exports = (passport) => {
     const app = express();
 
     // Point d'entrée pour la connexion
-    app.get('/connexion', function (req, res, next) {
+    app.post('/connexion', function (req, res, next) {
         // @TODO : Vérifer le nom de la variable username
         if (!req.body.username)
             return res.send({success: false, message: 'empty username'});
@@ -36,6 +36,16 @@ module.exports = (passport) => {
                 return res.redirect('/index.html');
             });
         })(req, res, next);
+    });
+
+    app.get('/inscription', function (req, res) {
+        if (req.session.passport.user != null)
+            return res.redirect('/index.html');
+        return res.redirect('/inscription')
+    });
+
+    app.post('/inscription', function (req, res) {
+    
     });
 
     return app;
