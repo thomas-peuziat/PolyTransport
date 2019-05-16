@@ -1,26 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>PolyTransport</title>
+<html lang="en"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <title>PolyTransport</title>
 
-        <!-- Style sheet -->
-        <link rel="stylesheet" href="./css/style.css">
+    <!-- Style sheet -->
+    <link rel="stylesheet" href="./css/style.css">
 
-        <!-- Polyfills pour le support de fetch dans les vieux navigateurs -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.min.js" async></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.1/fetch.min.js" async></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-        <!-- Mustache ! -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" async></script>
+    <!-- Polyfills pour le support de fetch dans les vieux navigateurs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.min.js" async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.1/fetch.min.js" async></script>
 
-        <script src="./js/main.js" defer></script>
-    </head>
-    <body>
-        <nav class="navbar">
-            <a href="#">Truc 1</a>
-            <a href="#">Truc 2</a>
-            <a href="#">Truc 3</a>
-        </nav>
-    </body>
-</html>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous" defer></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous" defer></script>
+
+    <!-- Mustache ! -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" async></script>
+
+    <script src="./js/main.js" defer="defer"></script>
+</head>
+<body class="bg-secondary">
+<div id="wrapper" class="w-100 bg-light">
+    <nav class="container-fluid navbar navbar-dark bg-dark">
+        <span class="navbar-brand">Salut</span>
+    </nav>
+
+    <main>
+        <div>
+            <p>BLABLABLA</p>
+        </div>
+    </main>
+
+    <nav class="container-fluid navbar fixed-bottom navbar-light bg-light border-top">
+        <a href="#">Truc 1</a>
+        <a href="#">Truc 2</a>
+        <a href="#">Truc 3</a>
+    </nav>
+</div>
+
+</body></html>

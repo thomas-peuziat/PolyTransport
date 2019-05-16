@@ -1,3 +1,16 @@
-a {
-    color: red;
+body {
+    display: flex;
+    flex-direction:row;
+    justify-content: center;
+    align-items: center;
+}
+
+#wrapper {
+    background:green;
+    max-width: 576px;
+    height: 100vh;
+}
+
+nav {
+    max-width: 576px;
 }
