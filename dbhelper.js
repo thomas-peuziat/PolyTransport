@@ -14,3 +14,47 @@ const db = new sqlite3.Database('./PolyTransport.db', sqlite3.OPEN_READWRITE, fu
         require('process').exit(-1);
     }
 });
+
+
+// Rend la fonction get de l'api sqlite compatible avec les promesses
+const get = sql => new Promise(function (resolve, reject) {
+    db.get(sql, function (err, row) {
+        if (err) {
+            reject(err);
+        }
+        else {
+            resolve(row);
+        }
+    });
+});
+
+// Idem pour la fonction all
+const all = sql => new Promise(function (resolve, reject) {
+    db.all(sql, function (err, rows) {
+        if (err) {
+            reject(err);
+        }
+        else {
+            resolve(rows);
+        }
+    });
+});
+
+
+
+
+// Cet export met à disposition des programmeurs 2 fonctions
+// utiles pour l'authentification des utilisateurs
+// dbhelper.users.byMail, qui récupère un utilisateur par son nom
+// dbhelper.users.byId, qui récupère un utilisateur par son Id
+module.exports.users = {
+    byMail: (mail) => get(`
+        select Id_usr, MDP from UTILISATEUR where mail = '${mail}';
+    `),
+    a: Promise.resolve({
+        id: 0,
+        checkPassword: (/*password*/) => true,
+    }),
+    byId: id => get(`select Id_usr as username from UTILISATEUR where id = ${id}`),
+};
+
