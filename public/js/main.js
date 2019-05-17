@@ -1,6 +1,5 @@
-/* eslint-env browser */
-/* global Mustache, page */
-/*'use strict';
+'use strict';
+<!--    TODO :  Load les templates -->
 
 page('/connexion', async function() {
     console.log('coc');
@@ -22,4 +21,4 @@ page('/connexion', async function() {
 });
 
 // On démarre le routing
-page.start();*/
+page.start();

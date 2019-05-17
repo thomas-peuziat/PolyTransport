@@ -14,3 +14,8 @@ body {
 nav {
     max-width: 576px;
 }
+
+#bottom-nav img {
+    max-height: 72px;
+    height: 15vw;
+}
