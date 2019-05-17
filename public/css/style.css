@@ -9,10 +9,16 @@ body {
     background:green;
     max-width: 576px;
     height: 100vh;
+    overflow-y:scroll;
 }
 
 nav {
     max-width: 576px;
+}
+
+.form-sign {
+    margin: auto;
+    padding-top: 40px;
 }
 
 #bottom-nav img {
