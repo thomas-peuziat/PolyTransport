@@ -38,15 +38,6 @@ module.exports = (passport) => {
         })(req, res, next);
     });
 
-    app.get('/inscription', function (req, res) {
-        if (req.session.passport.user != null)
-            return res.redirect('/index.html');
-        return res.redirect('/inscription')
-    });
-
-    app.post('/inscription', function (req, res) {
-    
-    });
 
     return app;
 
