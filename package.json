@@ -7,11 +7,12 @@
     "cookie-parser": "^1.4.4",
     "express": "^4.16.4",
     "express-session": "^1.16.1",
+    "node-fetch": "^2.6.0",
+    "nodemon": "^1.11.0",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "sqlite3": "^4.0.6",
-    "nodemon": "^1.11.0",
-    "process": "^0.11.10"
+    "process": "^0.11.10",
+    "sqlite3": "^4.0.6"
   },
   "scripts": {
     "createDB": "sqlite3 PolyTransport.db < createDB.sql",

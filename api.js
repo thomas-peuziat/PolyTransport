@@ -18,6 +18,8 @@ module.exports = (passport) => {
 
     // Point d'entrée pour la connexion
     app.post('/connexion', function (req, res, next) {
+        // @TODO : Supprimer cette ligne, juste un test
+        return console.log({success: true, message: '/connexion'});
         // @TODO : Vérifer le nom de la variable username
         if (!req.body.username)
             return res.send({success: false, message: 'empty username'});
