@@ -19,7 +19,6 @@ module.exports = (passport) => {
     // Point d'entrée pour la connexion
     app.post('/connexion', function (req, res, next) {
         // @TODO : Supprimer cette ligne, juste un test
-        return console.log({success: true, message: '/connexion'});
         // @TODO : Vérifer le nom de la variable username
         if (!req.body.username)
             return res.send({success: false, message: 'empty username'});
@@ -28,14 +27,17 @@ module.exports = (passport) => {
             return res.send({success: false, message: 'empty password'});
 
         passport.authenticate('local', function (err, user) {
-            if (err)
-                return next(err);
-            if (!user)
-                return res.redirect('/connexion');
+            if (err) {
+                return next(err); // will generate a 500 error
+            }
+            if (!user) {
+                return res.send({succes: false, message: 'authentication failed'});
+            }
             req.login(user, function (err) {
-                if (err)
+                if (err) {
                     return next(err);
-                return res.redirect('/index.html');
+                }
+                return res.send({success: true, message: 'authentication succeeded'});
             });
         })(req, res, next);
     });

@@ -2,8 +2,8 @@ let express = require('express');
 let router = express.Router();
 let fetch = require('node-fetch');
 
-router.post('/', async function() {
-    console.log('coc');
+router.post('/', async function(req, res, next) {
+    console.log(req.body);
     let response;
     response = await fetch('http://127.0.0.1:8080/api/connexion', {
         headers: {
@@ -11,13 +11,12 @@ router.post('/', async function() {
             'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
         },
         method: 'POST',
-        body: 'username=f&password=f',
+        body: 'username=' + encodeURIComponent(req.body.mail) + '&password=' + encodeURIComponent(req.body.password),
     });
-    console.log('coc');
     if (response.ok)
-        console.log(response);
+        console.log('ok');
     else
-        console.log("nok");
+        console.log('nok');
 });
 
 router.get('/', function(req, res, next) {

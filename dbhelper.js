@@ -4,7 +4,7 @@
 // Ce modules fournit quelques fonction pour simplifier l'accès
 // à notre base de données sqlite
 
-const sqlite3 = require('sqlite3');
+const sqlite3 = require('sqlite3').verbose();
 
 const db = new sqlite3.Database('./PolyTransport.db', sqlite3.OPEN_READWRITE, function (err) {
     if (err) {
@@ -19,6 +19,7 @@ const db = new sqlite3.Database('./PolyTransport.db', sqlite3.OPEN_READWRITE, fu
 // Rend la fonction get de l'api sqlite compatible avec les promesses
 const get = sql => new Promise(function (resolve, reject) {
     db.get(sql, function (err, row) {
+        
         if (err) {
             reject(err);
         }
@@ -48,9 +49,7 @@ const all = sql => new Promise(function (resolve, reject) {
 // dbhelper.users.byMail, qui récupère un utilisateur par son nom
 // dbhelper.users.byId, qui récupère un utilisateur par son Id
 module.exports.users = {
-    byMail: (mail) => get(`
-        select Id_usr, MDP from UTILISATEUR where mail = '${mail}';
-    `),
+    byMail: (username) => get(`select Id_usr, MDP from UTILISATEUR where Mail = '${username}'`),
     a: Promise.resolve({
         id: 0,
         checkPassword: (/*password*/) => true,

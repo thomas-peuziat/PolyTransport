@@ -12,10 +12,10 @@ const dbHelper = require('./dbhelper.js');
 // LocalStrategy = stockage des identifiants et mots de passe
 // des utilisateurs en local dans notre base de données
 passport.use(new LocalStrategy(
-    function (mail, password, cb) {
+    function (username, password, cb) {
         // On récupère les information (mot de passe) de l'utilisateur
-        // passé en paramètre
-        dbHelper.users.byMail(mail)
+        // passé en paramètre 
+        dbHelper.users.byMail(username)
             .then(
                 user => {
                     // Utilisateur pas dans la base de données
@@ -23,7 +23,7 @@ passport.use(new LocalStrategy(
                         cb(null, false);
                     }
                     // Utilisateur dans la base de données et mot de passe ok
-                    else if (user.password === password) {
+                    else if (user.MDP === password) {
                         cb(null, user);
                     }
                     // Utilisateur dans la base de données mais mauvais mot de passe
@@ -41,7 +41,7 @@ passport.use(new LocalStrategy(
 // Stocke les données de l'utilisation dans le cookie de session
 passport.serializeUser(function (user, cb) {
     console.debug('serializeUser ', JSON.stringify(user));
-    cb(null, user.id);
+    cb(null, user.Id_usr);
 });
 
 // Récupère les données de l'utilisateur depuis le cookie de session
