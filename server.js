@@ -14,10 +14,10 @@ const indexRouter = require('./routes/index');
 const connexionRouter = require('./routes/connexion');
 
 // on met en place une authentification valide pour toute le site
-//const passport = auth(app);
+const passport = auth(app);
 
 // l'api d'accès aux données sera disponible sous la route "/api"
-app.use('/api', api(/*passport*/));
+app.use('/api', api(passport));
 
 // Le contenu statique public sera lu à partir du repertoire 'public'
 app.use('/public', express.static('public'));
