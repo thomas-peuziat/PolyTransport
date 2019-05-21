@@ -1,6 +1,9 @@
 let express = require('express');
 let router = express.Router();
 let fetch = require('node-fetch');
+var isLog = require('./index').isLog;
+
+//import logged from './index';
 
 router.post('/', async function(req, res, next) {
     console.log(req.body);
@@ -13,13 +16,14 @@ router.post('/', async function(req, res, next) {
         method: 'POST',
         body: 'username=' + encodeURIComponent(req.body.mail) + '&password=' + encodeURIComponent(req.body.password),
     });
-    if (response.ok)
-        console.log('ok');
+    if (response.ok) {
+        console.log(isLog);
+    }
     else
         console.log('nok');
 });
 
-router.get('/', function(req, res, next) {
+router.get('/', require('connect-ensure-login').ensureLoggedIn(), function(req, res, next) {
     // @ TODO: render template login.mustache
     res.send({success: true, message: 'ok'});
 });
