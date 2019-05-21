@@ -43,7 +43,7 @@ app.use('/private',
 // c'est le routeur coté client qui fera alors le routing
 app.use(function (req, res) {
     console.log('all');
-    template.renderTemplate(template.templates('http://127.0.0.1:8080/public/templates/login.mustache'), {})
+    template.renderTemplate(template.templates('http://127.0.0.1:8080/public/views/login.mustache'), {})
         .then(body => res.send(body))
         .catch(error => console.log("erreur" + error));
 });

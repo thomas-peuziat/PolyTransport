@@ -20,7 +20,7 @@ router.post('/', async function(req, res, next) {
         res.redirect('public/index.html');
     }
     else {
-        template.renderTemplate(template.templates('http://127.0.0.1:8080/public/templates/login.mustache'), {})
+        template.renderTemplate(template.templates('http://127.0.0.1:8080/public/views/login.mustache'), {})
           .then(body => res.send(body))
             .catch(error => console.log("erreur" + error));
     }
@@ -29,12 +29,12 @@ router.post('/', async function(req, res, next) {
 router.get('/', function(req, res, next) {
     // @ TODO: render template login.mustache
     if (!isLog) {
-        template.renderTemplate(template.templates('http://127.0.0.1:8080/public/templates/login.mustache'), {})
+        template.renderTemplate(template.templates('http://127.0.0.1:8080/public/views/login.mustache'), {})
             .then(body => res.send(body))
             .catch(error => console.log("erreur" + error));
     }
     else {
-        template.renderTemplate(template.templates('http://127.0.0.1:8080/public/templates/index.mustache'), {})
+        template.renderTemplate(template.templates('http://127.0.0.1:8080/public/views/index.mustache'), {})
             .then(body => res.send(body))
             .catch(error => console.log("erreur" + error));
     }
