@@ -23,7 +23,8 @@ exports.loadPartials = (() => {
         if (!partials) {
             partials = {
                 navbar: exports.templates('http://127.0.0.1:8080/public/partials/navbar.mustache'),
-                topbar: exports.templates('http://127.0.0.1:8080/public/partials/topbar.mustache')
+                topbar: exports.templates('http://127.0.0.1:8080/public/partials/topbar.mustache'),
+                head: exports.templates('http://127.0.0.1:8080/public/partials/head.mustache')
             };
 
             const promises = Object.entries(partials)
@@ -45,6 +46,7 @@ exports.renderTemplate  = async function (template, context) {
 
     return (Mustache.render(await template, context, {
         navbar: partials[0][1],
-        topbar: partials[1][1]
+        topbar: partials[1][1],
+        head: partials[2][1]
     }));
 };
