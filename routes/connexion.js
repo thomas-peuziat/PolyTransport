@@ -1,7 +1,7 @@
 let express = require('express');
 let router = express.Router();
 let fetch = require('node-fetch');
-let isLog = require('./index').isLog;
+var isLog = require('./index').isLog;
 let template = require('../template.js');
 
 router.post('/', async function(req, res, next) {
@@ -16,17 +16,29 @@ router.post('/', async function(req, res, next) {
         body: 'username=' + encodeURIComponent(req.body.mail) + '&password=' + encodeURIComponent(req.body.password),
     });
     if (response.ok) {
-        console.log(isLog);
+        isLog = true;
+        res.redirect('public/index.html');
     }
-    else
-        console.log('nok');
+    else {
+        template.renderTemplate(template.templates('http://127.0.0.1:8080/public/templates/login.mustache'), {})
+          .then(body => res.send(body))
+            .catch(error => console.log("erreur" + error));
+    }
 });
 
-router.get('/', require('connect-ensure-login').ensureLoggedIn(), function(req, res, next) {
+router.get('/', function(req, res, next) {
     // @ TODO: render template login.mustache
-    template.renderTemplate(template.templates('http://127.0.0.1:8080/public/templates/login.mustache'), {})
-        .then(body => res.send(body))
-        .catch(error => console.log("erreur" + error));
+    if (!isLog) {
+        template.renderTemplate(template.templates('http://127.0.0.1:8080/public/templates/login.mustache'), {})
+            .then(body => res.send(body))
+            .catch(error => console.log("erreur" + error));
+    }
+    else {
+        template.renderTemplate(template.templates('http://127.0.0.1:8080/public/templates/index.mustache'), {})
+            .then(body => res.send(body))
+            .catch(error => console.log("erreur" + error));
+    }
+
 });
 
 module.exports = router;

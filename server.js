@@ -9,6 +9,7 @@ const app = express();
 // et de nos modules à nous !
 const api = require('./api.js');
 const auth = require('./auth.js');
+const template = require('./template');
 
 const indexRouter = require('./routes/index');
 const connexionRouter = require('./routes/connexion');
@@ -26,6 +27,7 @@ app.use('/public', express.static('public'));
 
 app.use('/', indexRouter);
 app.use('/connexion', connexionRouter);
+app.use('/inscription', inscriptionRouter);
 
 // Le contenu statique privé sera lu à partir du repertoire 'private'
 // dans cet exemple, il s'agit principalement des templates de la partie admin
@@ -41,7 +43,9 @@ app.use('/private',
 // c'est le routeur coté client qui fera alors le routing
 app.use(function (req, res) {
     console.log('all');
-    res.sendFile('public/index.html', {'root': __dirname});
+    template.renderTemplate(template.templates('http://127.0.0.1:8080/public/templates/login.mustache'), {})
+        .then(body => res.send(body))
+        .catch(error => console.log("erreur" + error));
 });
 
 // Lancement du serveur web

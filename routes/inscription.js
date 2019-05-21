@@ -11,3 +11,5 @@ router.get('/', require('connect-ensure-login').ensureLoggedIn(), function(res) 
 router.post('/', async function(req, res, next) {
 
 });
+
+module.exports = router;
