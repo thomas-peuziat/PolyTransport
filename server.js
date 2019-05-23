@@ -11,9 +11,9 @@ const api = require('./api.js');
 const auth = require('./auth.js');
 const template = require('./template');
 
-const indexRouter = require('./routes/index');
-const connexionRouter = require('./routes/connexion');
-const inscriptionRouter = require('./routes/inscription');
+const indexRouter = require('./routes/indexroute');
+const connexionRouter = require('./routes/connexionroute');
+const inscriptionRouter = require('./routes/inscriptionroute');
 
 // on met en place une authentification valide pour toute le site
 const passport = auth(app);
