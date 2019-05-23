@@ -23,8 +23,7 @@ const loadPartials = (() => {
         if (!partials) {
             partials = {
                 navbar: templates('/public/partials/navbar.mustache'),
-                topbar: templates('/public/partials/topbar.mustache'),
-                head: templates('/public/partials/head.mustache'),
+                topbar: templates('/public/partials/topbar.mustache'), 
             };
             const promises = Object.entries(partials)
                 .map(async function ([k, v]) {
