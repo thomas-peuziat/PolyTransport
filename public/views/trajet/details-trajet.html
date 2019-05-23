@@ -1,16 +1,78 @@
 <!DOCTYPE html>
 <html lang="fr">
-{{>head}}
+<head>
+    <meta charset="UTF-8">
+    <title>PolyTransport</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Style sheet -->
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Polyfills pour le support de fetch dans les vieux navigateurs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.min.js" async></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.1/fetch.min.js" async></script>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous" defer></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous" defer></script>
+
+    <!-- Mustache ! -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" async></script>
+
+    <!--    <script src="../js/main.js" defer="defer"></script>-->
+</head>
 <body class="bg-secondary">
 <div id="wrapper" class="w-100 bg-light">
 
-    {{>topbar}}
+    <nav class="container-fluid navbar navbar-dark bg-dark">
+        <span class="h1 text-light">Details d'un trajet</span>
+    </nav>
+
+    <button type="button" class="ml-3 mt-3 pl-4 pr-4 btn btn-primary go-back">
+        <a href="#"><img src="../../img/baseline_arrow_back_white_24dp.png" alt="go_back"></a>
+    </button>
+
+    <div class="mt-3 container column justify-content-center align-items-center">
+        <div class="card mb-3">
+            <div class="card-header">
+                {{NOM PERSONNE}} - {{prix}} <img src="../../img/baseline-euro_symbol-24px.svg" alt="€">
+            </div>
+            <div class="card-body">
+                <span class="card-title h5">{{depart}} <img src="../../img/baseline-arrow_right_alt-24px.svg" alt="right arrow"> {{destination}}</span>
+                <p class="card-text">Heure départ : {{heureDep}} / Heure arrivée : {{heureArriv}}</p>
+                <p class="card-text">Nombre de places : {{nbPlaces}}</p>
+            </div>
+            <hr>
+            <div class="card-body">
+                <span class="card-title h5">{{conducteur.nom}} <img src="{{conducteur.img}}" alt="photo"></span>
+                <p class="card-text">Note globale : {{conducteur.note}}</p>
+                <p class="card-text">Nombre de places : {{nbPlaces}}</p>
+            </div>
+            <hr>
+            <div class="card-body">
+                <span class="card-title h5">{{vehicule.modele}}</span>
+                <p class="card-text">Année : {{vehicule.annee}}</p>
+                <p class="card-text">Marque : {{vehicule.marque}}</p>
+            </div>
+        </div>
+        <div class="row justify-content-around">
+            <a href="#" class="btn btn-lg btn-info col-5">Poser une question...</a>
+            <a href="#" class="btn btn-lg btn-success col-5">Réserver</a>
+        </div>
+    </div>
 
 
-    <!-- TODO: Thomas -->
-
-
-    {{>navbar}}
+    <nav id="bottom-nav" class="container-fluid navbar fixed-bottom navbar-light bg-light border-top justify-content-around">
+        <a href="#"><img src="../../img/outline-map-24px.svg" alt="outline-map"></a>
+        <a href="#"><img src="../../img/outline-account_circle-24px.svg" alt="outline-account_circle"></a>
+        <a href="#"><img src="../../img/outline-chat-24px.svg" alt="outline-chat"></a>
+    </nav>
 </div>
 
 </body>
