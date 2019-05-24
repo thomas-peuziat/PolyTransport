@@ -34,6 +34,7 @@ module.exports = (passport) => {
                 return res.send({succes: false, message: 'authentication failed'});
             }
             req.login(user, function (err) {
+                
                 if (err) {
                     return next(err);
                 }

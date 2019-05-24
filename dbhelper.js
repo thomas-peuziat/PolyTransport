@@ -54,6 +54,6 @@ module.exports.users = {
         id: 0,
         checkPassword: (/*password*/) => true,
     }),
-    byId: id => get(`select Id_usr as username from UTILISATEUR where id = ${id}`),
+    byId: id => get(`select Mail as username from UTILISATEUR where Id_usr = ${id}`),
 };
 
