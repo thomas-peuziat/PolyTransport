@@ -10,7 +10,7 @@ router.post('/', require('connect-ensure-login').ensureLoggedIn('/connexion'), f
 });
 
 router.get('/rechercher', require('connect-ensure-login').ensureLoggedIn('/connexion'), function(req, res, next) {
-    //res.sendFile('accueil.html',  {'root': 'public/views/trajet'});
+    res.sendFile('rechercher-trajet.html',  {'root': 'public/views/trajet'});
 });
 
 module.exports = router;
