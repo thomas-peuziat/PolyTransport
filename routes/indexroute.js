@@ -3,12 +3,14 @@ var router = express.Router();
 
 /* GET home page. */
 
-router.get('/', function(req, res, next) {
+router.get('/', require('connect-ensure-login').ensureLoggedIn('/connexion'), function(req, res, next) {
+    console.log('ok');
+    res.sendFile('accueil-trajet.html',  {'root': 'public/views/trajet'});
     
 });
 
 router.post('/', require('connect-ensure-login').ensureLoggedIn('/connexion'), function(req, res, next) {
-    res.sendfile('login1.html', {'root': 'public/views/'});
+    res.sendFile('accueil-trajet.html', {'root': 'public/views/trajet'});
 });
 
 

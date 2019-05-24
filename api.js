@@ -38,7 +38,6 @@ module.exports = (passport) => {
                 if (err) {
                     return next(err);
                 }
-                console.log(req.session);
                 return res.send({success: true, message: 'authentication succeeded'});
             });
         })(req, res, next);

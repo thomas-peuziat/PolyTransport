@@ -8,7 +8,7 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-    res.sendFile('login.html',  {'root': 'public/views/'});
+    res.sendFile('login.html',  {'root': 'public/views'});
 });
 
 module.exports = router;

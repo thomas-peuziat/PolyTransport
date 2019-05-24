@@ -2,10 +2,11 @@
 
 import { renderTemplate, templates } from './templatefunction.js';
 
-renderLoginPage();
+let context = {};
+renderLoginPage(context);
 
-async function renderLoginPage() {
-    await renderTemplate(templates('/public/views/login.html'), {});
+async function renderLoginPage(context) {
+    await renderTemplate(templates('/public/views/login.html'), context);
     
     const submit_btn = document.querySelector('.btn');
 
@@ -37,10 +38,10 @@ async function renderLoginPage() {
                         //     },
                         //     method: 'POST',
                         // }).then(res => res);
-                        document.location.href = '/inscription';
+                        document.location.href = '/';
                     }
                     else {
-                        renderLoginPage();
+                        renderLoginPage({...context, message: resp.message});
                     }
                 });
                 //console.log(response);
