@@ -6,7 +6,6 @@ body {
 }
 
 #wrapper {
-    background:green;
     max-width: 576px;
     height: 100vh;
     overflow-y:auto;
@@ -62,8 +61,6 @@ a.lien:visited{
     margin-top:1em;
     padding-left: 0.75em;
     display: table;
-    /* flex-direction: row; */
-    /* align-items: center;  */
     max-width: 70%;
     margin-bottom: 1em;
 }
