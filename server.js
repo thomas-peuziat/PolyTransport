@@ -14,7 +14,7 @@ const template = require('./template');
 const indexRouter = require('./routes/indexroute');
 const connexionRouter = require('./routes/connexionroute');
 const inscriptionRouter = require('./routes/inscriptionroute');
-const accueiltrajetRouter = require('./routes/accueiltrajetroute');
+const trajetRouter = require('./routes/trajetroute');
 
 // on met en place une authentification valide pour toute le site
 const passport = auth(app);
@@ -29,7 +29,7 @@ app.use('/public', express.static('public'));
 app.use('/', indexRouter);
 app.use('/connexion', connexionRouter);
 app.use('/inscription', inscriptionRouter);
-app.use('/accueil-trajet', accueiltrajetRouter);
+app.use('/trajet', trajetRouter);
 
 // Le contenu statique privé sera lu à partir du repertoire 'private'
 // dans cet exemple, il s'agit principalement des templates de la partie admin
@@ -44,10 +44,7 @@ app.use('/private',
 // Pour toutes les autres url (catch all) on renverra l'index.html
 // c'est le routeur coté client qui fera alors le routing
 app.use(function (req, res) {
-    console.log('all');
-    template.renderTemplate(template.templates('http://127.0.0.1:8080/public/views/login.mustache'), {})
-        .then(body => res.send(body))
-        .catch(error => console.log("erreur" + error));
+    res.send("Erreur, mauvaise route");
 });
 
 // Lancement du serveur web

@@ -2,4 +2,4 @@
 
 import { renderTemplate, templates } from './templatefunction.js';
 
-renderTemplate(templates('/public/views/trajet/accueil-trajet.html'), {});
+renderTemplate(templates('/public/views/trajet/accueil.html'), {});
