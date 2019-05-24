@@ -14,6 +14,7 @@ const template = require('./template');
 const indexRouter = require('./routes/indexroute');
 const connexionRouter = require('./routes/connexionroute');
 const inscriptionRouter = require('./routes/inscriptionroute');
+const accueiltrajetRouter = require('./routes/accueiltrajetroute');
 
 // on met en place une authentification valide pour toute le site
 const passport = auth(app);
@@ -28,6 +29,7 @@ app.use('/public', express.static('public'));
 app.use('/', indexRouter);
 app.use('/connexion', connexionRouter);
 app.use('/inscription', inscriptionRouter);
+app.use('/accueil-trajet', accueiltrajetRouter);
 
 // Le contenu statique privé sera lu à partir du repertoire 'private'
 // dans cet exemple, il s'agit principalement des templates de la partie admin

@@ -38,7 +38,7 @@ async function renderLoginPage(context) {
                         //     },
                         //     method: 'POST',
                         // }).then(res => res);
-                        document.location.href = '/';
+                        document.location.href = '/accueil-trajet';
                     }
                     else {
                         renderLoginPage({...context, message: resp.message});
