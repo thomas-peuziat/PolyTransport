@@ -25,3 +25,59 @@ nav {
     max-height: 72px;
     height: 15vw;
 }
+
+a.lien{ 
+    text-decoration: none;
+    color:black;
+}
+a.lien:hover{ 
+    text-decoration: none;
+    color:black;
+}
+
+a.lien:visited{
+    text-decoration: none;
+    color:black;
+}
+
+.messageRecu {
+    background: #f1f0f0;
+    -webkit-border-radius: 10px ;
+    -moz-border-radius:    10px ; 
+    border-radius:         10px ; 
+    margin-left:0.5em;
+    float: left;
+}
+
+.messageEnvoye{
+    background: #0084ff;
+    -webkit-border-radius: 10px ;
+    -moz-border-radius:    10px ; 
+    border-radius:         10px ; 
+    margin-left:15em;
+    float: right;
+}
+
+.message{
+    margin-top:1em;
+    padding-left: 0.75em;
+    display: table;
+    /* flex-direction: row; */
+    /* align-items: center;  */
+    max-width: 70%;
+    margin-bottom: 1em;
+}
+
+.texteMessage{
+    padding-left: 1em;
+    padding-right: 1em;
+    font-size: small;
+    margin-bottom: 0em;
+    max-width: 100%;
+    word-wrap: break-word;
+}
+
+#containerWrapper{
+    padding-bottom: 15vw;
+}
+
