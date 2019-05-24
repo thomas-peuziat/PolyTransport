@@ -13,4 +13,6 @@ router.get('/rechercher', require('connect-ensure-login').ensureLoggedIn('/conne
     res.sendFile('rechercher-trajet.html',  {'root': 'public/views/trajet'});
 });
 
+// @TODO: liste-trajets
+
 module.exports = router;

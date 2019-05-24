@@ -18,11 +18,8 @@ module.exports = (passport) => {
 
     // Point d'entrée pour la connexion
     app.post('/connexion', function (req, res, next) {
-        // @TODO : Supprimer cette ligne, juste un test
-        // @TODO : Vérifer le nom de la variable username
         if (!req.body.username)
             return res.send({success: false, message: 'empty username'});
-        // @TODO : Vérifer le nom de la variable password
         if (!req.body.password)
             return res.send({success: false, message: 'empty password'});
 
@@ -42,6 +39,17 @@ module.exports = (passport) => {
             });
         })(req, res, next);
     });
+
+
+    // Point d'entrée pour la recherche de trajet
+    app.post('/search-trajet', function (req, res, next) {
+        if (!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.date_depart || !req.body.heure_depart)
+            return res.send({success: false, message: 'Informations manquantes'});
+
+        return res.send({success: true});
+    });
+
+    // @TODO: liste-trajets
 
 
     return app;

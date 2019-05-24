@@ -57,3 +57,7 @@ module.exports.users = {
     byId: id => get(`select Mail as username from UTILISATEUR where Id_usr = ${id}`),
 };
 
+module.exports.trajets = {
+    //@TODO byHeure, byId, byEtat, byLieuDepart, byLieuArrivee, byConducteur
+};
+

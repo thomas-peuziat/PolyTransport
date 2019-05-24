@@ -8,7 +8,7 @@ renderLoginPage(context);
 async function renderLoginPage(context) {
     await renderTemplate(templates('/public/views/login.html'), context);
     
-    const submit_btn = document.querySelector('.btn');
+    const submit_btn = document.querySelector('#login-btn');
 
     submit_btn.addEventListener('click', function () {
         console.log(document.body);
@@ -29,7 +29,6 @@ async function renderLoginPage(context) {
                 response.json()
                 .then((resp) => {
                     if (resp.success) {
-                        // @TODO : render template accueil-trajet
                         //renderTemplate(templates('/public/views/signup.html'), {});
                         // fetch('/connexion', {
                         //     headers: {

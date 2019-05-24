@@ -9,7 +9,6 @@ const app = express();
 // et de nos modules à nous !
 const api = require('./api.js');
 const auth = require('./auth.js');
-const template = require('./template');
 
 const indexRouter = require('./routes/indexroute');
 const connexionRouter = require('./routes/connexionroute');
@@ -31,20 +30,10 @@ app.use('/connexion', connexionRouter);
 app.use('/inscription', inscriptionRouter);
 app.use('/trajet', trajetRouter);
 
-// Le contenu statique privé sera lu à partir du repertoire 'private'
-// dans cet exemple, il s'agit principalement des templates de la partie admin
-// on vérifie ici que l'utilisateur est bien authentifié
-app.use('/private',
-    require('connect-ensure-login').ensureLoggedIn(),
-    express.static('private')
-);
-
-
-
-// Pour toutes les autres url (catch all) on renverra l'index.html
-// c'est le routeur coté client qui fera alors le routing
+// Erreur 404
 app.use(function (req, res) {
-    res.send("Erreur, mauvaise route");
+    res.status(404).send("<h1>Erreur 404: Route inexistante</h1>" +
+        "<a href='/trajet/accueil'>Retour à l'accueil</a>");
 });
 
 // Lancement du serveur web
