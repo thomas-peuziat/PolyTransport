@@ -24,7 +24,7 @@ async function renderLoginPage(context) {
             body: 'username=' + username + '&password=' + password,
         })
         .then(function (response) {
-            console.log(response)
+            console.log(response);
             if (response.ok) {
                 response.json()
                 .then((resp) => {
@@ -38,7 +38,7 @@ async function renderLoginPage(context) {
                         //     },
                         //     method: 'POST',
                         // }).then(res => res);
-                        document.location.href = '/accueil-trajet';
+                        document.location.href = '/trajet/accueil';
                     }
                     else {
                         renderLoginPage({...context, message: resp.message});
