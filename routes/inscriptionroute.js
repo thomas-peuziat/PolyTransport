@@ -1,13 +1,12 @@
 let express = require('express');
 let router = express.Router();
-let fetch = require('node-fetch');
 
-router.get('/', require('connect-ensure-login').ensureLoggedIn('/connexion'), function(res) {
+router.get('/', require('connect-ensure-login').ensureLoggedIn('/connexion'), function(req, res, next) {
         // @TODO : renderTemplate inscription
-        res.redirect('/')
+        res.sendFile('signup.html',  {'root': 'public/views/'});
 });
 
-router.post('/', async function(req, res, next) {
+router.post('/', function(req, res, next) {
 
 });
 
