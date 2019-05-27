@@ -52,6 +52,13 @@ module.exports = (passport) => {
     // @TODO: liste-trajets
 
 
+    //Point d'entrée pour la recherche de trajet
+    app.post('/propose-trajet', function(req, res, next){
+        if(!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.date_depart || !req.body.heure_depart || !req.body.modele_voiture || !req.body.nbPassagers)
+            return res.send({success: false, message: 'Informations manquantes'});
+        return res.send({success: true});
+    });
+    
     return app;
 
 };
