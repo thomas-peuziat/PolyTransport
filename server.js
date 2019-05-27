@@ -43,12 +43,12 @@ app.use('/private',
 
 // Pour toutes les autres url (catch all) on renverra l'index.html
 // c'est le routeur coté client qui fera alors le routing
-app.use(function (req, res) {
-    console.log('all');
-    template.renderTemplate(template.templates('http://127.0.0.1:8080/public/views/login.mustache'), {})
-        .then(body => res.send(body))
-        .catch(error => console.log("erreur" + error));
-});
+// app.use(function (req, res) {
+//     console.log('all');
+//     template.renderTemplate(template.templates('http://127.0.0.1:8080/public/views/login.mustache'), {})
+//         .then(body => res.send(body))
+//         .catch(error => console.log("erreur" + error));
+// });
 
 // Lancement du serveur web
 const server = app.listen(8080, function () {

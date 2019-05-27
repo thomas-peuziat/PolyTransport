@@ -29,6 +29,18 @@ const get = sql => new Promise(function (resolve, reject) {
     });
 });
 
+const run = sql => new Promise(function (resolve, reject) {
+    db.run(sql, function (err, row) {
+        console.log(sql);
+        if (err) {
+            reject(err);
+        }
+        else {
+            resolve(row);
+        }
+    });
+});
+
 // Idem pour la fonction all
 const all = sql => new Promise(function (resolve, reject) {
     db.all(sql, function (err, rows) {
@@ -55,5 +67,6 @@ module.exports.users = {
         checkPassword: (/*password*/) => true,
     }),
     byId: id => get(`select Mail as username from UTILISATEUR where Id_usr = ${id}`),
+    create: (nom, prenom, email, phone, photo, password) => run(`insert into UTILISATEUR (Telephone, Mail, Nom, Prenom, MDP, Image) values ('${phone}', '${email}', '${nom}', '${prenom}', '${password}', '${photo}')`),
 };
 
