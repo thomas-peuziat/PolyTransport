@@ -31,19 +31,18 @@ CREATE TABLE VEHICULE(
 -- Table: UTILISATEUR
 ------------------------------------------------------------
 CREATE TABLE UTILISATEUR(
-	Id_usr         INTEGER NOT NULL ,
+	Id_usr         INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT ,
 	Telephone      TEXT NOT NULL ,
 	Mail           TEXT NOT NULL ,
 	Nom            TEXT NOT NULL ,
 	Prenom         TEXT NOT NULL ,
-	DDN            NUMERIC NOT NULL ,
+	DDN            DATE ,
 	Note           REAL ,
 	MDP            TEXT NOT NULL ,
-	Image          BLOB NOT NULL ,
-	Id_vehicule    INTEGER NOT NULL,
-	CONSTRAINT UTILISATEUR_PK PRIMARY KEY (Id_usr)
+	Image          BLOB ,
+	Id_vehicule    INTEGER ,
 
-	,CONSTRAINT UTILISATEUR_VEHICULE_FK FOREIGN KEY (Id_vehicule) REFERENCES VEHICULE(Id_vehicule)
+	CONSTRAINT UTILISATEUR_VEHICULE_FK FOREIGN KEY (Id_vehicule) REFERENCES VEHICULE(Id_vehicule)
 );
 
 
