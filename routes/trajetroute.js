@@ -19,4 +19,10 @@ router.get('/proposer', require('connect-ensure-login').ensureLoggedIn('/connexi
 
 // @TODO: liste-trajets
 
+router.get('/liste-trajets', require('connect-ensure-login').ensureLoggedIn('/connexion'), function(req, res, next) {
+    console.log(req.query);
+
+    res.sendFile('liste-trajets.html',  {'root': 'public/views/trajet'});
+});
+
 module.exports = router;

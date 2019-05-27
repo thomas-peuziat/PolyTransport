@@ -7,6 +7,7 @@
 
 // Expressjs
 const express = require('express');
+const dbhelper = require('./dbhelper.js');
 // Notre module nodejs d'accès simplifié à la base de données
 const dbHelper = require('./dbhelper.js');
 
@@ -67,14 +68,43 @@ module.exports = (passport) => {
     });
 
     // Point d'entrée pour la recherche de trajet
-    app.post('/search-trajet', function (req, res, next) {
-        if (!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.date_depart || !req.body.heure_depart)
+    app.get('/search-trajet', function (req, res, next) {
+        if (!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.heure_depart)
             return res.send({success: false, message: 'Informations manquantes'});
 
-        return res.send({success: true});
-    });
+        dbhelper.trajets.byLieuDepArrHeure(req.body.lieu_depart, req.body.lieu_arrivee, req.body.heure_depart)
+            .then((response) => {
+                /*let trajets = {
+                    prix: response.prix,
+                    nbPlaces: response.Nb_places,
+                    conducteur: {
+                        nom: '',
+                        prenom: ''
+                    },
+                    depart: {
+                        lieu:'',
+                        heure:''
+                    },
+                    arrivee: {
+                        lieu:'',
+                        heure:''
+                    },
+                };
+                let idConducteur = response.Id_conducteur;
 
-    // @TODO: liste-trajets
+                let idLieuDepart = response.Id_lieu_depart;
+                let idLieuArrivee = response.Id_lieu_arrivee;
+
+                dbhelper.users.byIdGetName(idConducteur)
+                    .then((response) => {
+                        trajets.
+                    });
+                */
+                return res.send({success: true, trajets: trajets});
+            });
+
+        return res.send({success: false, message: 'Erreur, rien ne va plus'});
+    });
 
 
     //Point d'entrée pour la recherche de trajet
