@@ -33,11 +33,9 @@
 <body class="bg-secondary">
 <div id="wrapper" class="w-100 bg-light">
 
-    <nav class="container-fluid navbar navbar-dark bg-dark">
-        <span class="h1 text-light">Créer un trajet</span>
-    </nav>
+    {{>topbar}}
 
-    <a href="">
+    <a href="/public/views/trajet/accueil.html">
         <button type="button" class="ml-3 mt-3 pl-4 pr-4 btn btn-primary go-back">
             <img src="/public/img/vectorpaint.svg" alt="go_back">
         </button>
@@ -66,12 +64,6 @@
                 <input type="time" id="inputHour" class="form-control" required>
             </div>
 
-            <label for="inputVoiture" class="mt-3">Modèle de voiture</label>
-            <select class="form-control" id="inputVoiture" name="inputVoiture">
-                {{#vehicule}}
-                <option>{{modele}}</option>
-                {{/véhicule}}
-            </select>
 
             <!-- TODO: Importer les données de véhicule -->
 

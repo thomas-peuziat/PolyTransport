@@ -16,7 +16,6 @@ async function renderRechercherPage(context) {
         const lieu_arrivee = document.querySelector('#inputArrival').value;
         const date_depart = document.querySelector('#inputDate').value;
         const heure_depart = document.querySelector('#inputHour').value;
-        const modele_voiture = document.querySelector("#inputVoiture").value;
         const nbPassagers = document.querySelector("#inputPassagers").value;
 
         fetch('/api/propose-trajet', {
@@ -25,14 +24,14 @@ async function renderRechercherPage(context) {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
             },
             method: 'POST',
-            body: 'lieu_depart=' + lieu_depart + '&lieu_arrivee=' + lieu_arrivee + '&date_depart=' + date_depart + '&heure_depart=' + heure_depart + '&modele_voiture=' + modele_voiture + '&nbPassagers=' + nbPassagers,
+            body: 'lieu_depart=' + lieu_depart + '&lieu_arrivee=' + lieu_arrivee + '&date_depart=' + date_depart + '&heure_depart=' + heure_depart + '&nbPassagers=' + nbPassagers,
         })
             .then(function (response) {
                 if (response.ok) {
                     response.json()
                         .then((resp) => {
                             if (resp.success) {
-                                //enregistrer dans la base de données
+                                document.location.href = '/trajet';
                             }
                             else {
                                 console.log("erreur");
