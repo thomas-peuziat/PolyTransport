@@ -41,7 +41,6 @@ module.exports = (passport) => {
     });
 
 
-<<<<<<< HEAD
     app.post('/inscription', function (req, res, next) {
         if (!req.body.nom)
             return res.send({success: false, message: 'empty name'});
@@ -67,7 +66,6 @@ module.exports = (passport) => {
         );
     });
 
-=======
     // Point d'entrée pour la recherche de trajet
     app.post('/search-trajet', function (req, res, next) {
         if (!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.date_depart || !req.body.heure_depart)
@@ -86,7 +84,6 @@ module.exports = (passport) => {
         return res.send({success: true});
     });
     
->>>>>>> 95ab8eb74246ab9182a10069e5d40ed13f280a99
     return app;
 
 };
