@@ -109,8 +109,34 @@ module.exports = (passport) => {
 
     //Point d'entrée pour la recherche de trajet
     app.post('/propose-trajet', function(req, res, next){
-        if(!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.date_depart || !req.body.heure_depart || !req.body.nbPassagers)
+        if(!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.date_depart || !req.body.heure_depart || !req.body.nbPlaces)
             return res.send({success: false, message: 'Informations manquantes'});
+        
+        //faire les requetes avec les données 
+        let idLieuDep;
+        let idLieuArr;
+        let idConducteur = 0;        //Récupérer l'id conducteur
+
+        dbHelper.lieu.byVille(req.body.lieu_depart).then( res => idLieuDep = res);
+
+        dbHelper.lieu.byVille(req.body.lieu_arrivee).then(res => idLieuArr = res);
+        
+        // req.session.passport.user
+        //Récupérer l'id conducteur
+        // dbHelper.user.byId().then(res => idConducteur =  );
+        if(idLieuArr!=null && idLieuDep!=null /*&& idConducteur != null*/){
+            dbHelper.users.create(null, null, null, null, req.body.prix, null, null, req.body.heure_depart, null,
+                idLieuDep, idLieuArr, idConducteur, req.body.nbPlaces)
+                .then(
+                    result => {
+                        res.send({success: true});                  
+                    },
+                    err => {
+                        res.send({success: false, message: 'bad request'});
+                        next(err);
+                    },
+            );
+        }
         return res.send({success: true});
     });
     

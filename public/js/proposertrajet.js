@@ -14,9 +14,9 @@ async function renderRechercherPage(context) {
 
         const lieu_depart = document.querySelector('#inputDeparture').value;
         const lieu_arrivee = document.querySelector('#inputArrival').value;
-        const date_depart = document.querySelector('#inputDate').value;
+        const prix = document.querySelector('#inputPrix').value;
         const heure_depart = document.querySelector('#inputHour').value;
-        const nbPassagers = document.querySelector("#inputPassagers").value;
+        const nbPlaces = document.querySelector("#inputPassagers").value;
 
         fetch('/api/propose-trajet', {
             headers: {
@@ -24,7 +24,7 @@ async function renderRechercherPage(context) {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
             },
             method: 'POST',
-            body: 'lieu_depart=' + lieu_depart + '&lieu_arrivee=' + lieu_arrivee + '&date_depart=' + date_depart + '&heure_depart=' + heure_depart + '&nbPassagers=' + nbPassagers,
+            body: 'lieu_depart=' + lieu_depart + '&lieu_arrivee=' + lieu_arrivee + '&prix=' + prix + '&heure_depart=' + heure_depart + '&nbPlaces=' + nbPlaces,
         })
             .then(function (response) {
                 if (response.ok) {
@@ -35,7 +35,7 @@ async function renderRechercherPage(context) {
                             }
                             else {
                                 console.log("erreur");
-                                document.location.href = ''; //renvoyer à l'accueil
+                                document.location.href = '/trajet'; 
                             }
                         });
                 }
