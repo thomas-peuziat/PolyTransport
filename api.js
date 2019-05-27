@@ -18,11 +18,8 @@ module.exports = (passport) => {
 
     // Point d'entrée pour la connexion
     app.post('/connexion', function (req, res, next) {
-        // @TODO : Supprimer cette ligne, juste un test
-        // @TODO : Vérifer le nom de la variable username
         if (!req.body.username)
             return res.send({success: false, message: 'empty username'});
-        // @TODO : Vérifer le nom de la variable password
         if (!req.body.password)
             return res.send({success: false, message: 'empty password'});
 
@@ -44,6 +41,7 @@ module.exports = (passport) => {
     });
 
 
+<<<<<<< HEAD
     app.post('/inscription', function (req, res, next) {
         if (!req.body.nom)
             return res.send({success: false, message: 'empty name'});
@@ -69,6 +67,26 @@ module.exports = (passport) => {
         );
     });
 
+=======
+    // Point d'entrée pour la recherche de trajet
+    app.post('/search-trajet', function (req, res, next) {
+        if (!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.date_depart || !req.body.heure_depart)
+            return res.send({success: false, message: 'Informations manquantes'});
+
+        return res.send({success: true});
+    });
+
+    // @TODO: liste-trajets
+
+
+    //Point d'entrée pour la recherche de trajet
+    app.post('/propose-trajet', function(req, res, next){
+        if(!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.date_depart || !req.body.heure_depart || !req.body.modele_voiture || !req.body.nbPassagers)
+            return res.send({success: false, message: 'Informations manquantes'});
+        return res.send({success: true});
+    });
+    
+>>>>>>> 95ab8eb74246ab9182a10069e5d40ed13f280a99
     return app;
 
 };

@@ -8,7 +8,7 @@ renderLoginPage(context);
 async function renderLoginPage(context) {
     await renderTemplate(templates('/public/views/login.html'), context);
     
-    const submit_btn = document.querySelector('.btn');
+    const submit_btn = document.querySelector('#login-btn');
 
     submit_btn.addEventListener('click', function () {
         console.log(document.body);
@@ -24,12 +24,11 @@ async function renderLoginPage(context) {
             body: 'username=' + username + '&password=' + password,
         })
         .then(function (response) {
-            console.log(response)
+            console.log(response);
             if (response.ok) {
                 response.json()
                 .then((resp) => {
                     if (resp.success) {
-                        // @TODO : render template accueil-trajet
                         //renderTemplate(templates('/public/views/signup.html'), {});
                         // fetch('/connexion', {
                         //     headers: {
@@ -38,7 +37,7 @@ async function renderLoginPage(context) {
                         //     },
                         //     method: 'POST',
                         // }).then(res => res);
-                        document.location.href = '/accueil-trajet';
+                        document.location.href = '/trajet/accueil';
                     }
                     else {
                         renderLoginPage({...context, message: resp.message});

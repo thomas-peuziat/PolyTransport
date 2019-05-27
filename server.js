@@ -9,13 +9,12 @@ const app = express();
 // et de nos modules à nous !
 const api = require('./api.js');
 const auth = require('./auth.js');
-const template = require('./template');
 
 const indexRouter = require('./routes/indexroute');
 const connexionRouter = require('./routes/connexionroute');
 const inscriptionRouter = require('./routes/inscriptionroute');
-const accueiltrajetRouter = require('./routes/accueiltrajetroute');
-
+const trajetRouter = require('./routes/trajetroute');
+const proposerRouter = require('./routes/proposerroute'); //added
 // on met en place une authentification valide pour toute le site
 const passport = auth(app);
 
@@ -29,18 +28,10 @@ app.use('/public', express.static('public'));
 app.use('/', indexRouter);
 app.use('/connexion', connexionRouter);
 app.use('/inscription', inscriptionRouter);
-app.use('/accueil-trajet', accueiltrajetRouter);
+app.use('/trajet', trajetRouter);
+app.use('/proposertrajet', proposerRouter); //added
 
-// Le contenu statique privé sera lu à partir du repertoire 'private'
-// dans cet exemple, il s'agit principalement des templates de la partie admin
-// on vérifie ici que l'utilisateur est bien authentifié
-app.use('/private',
-    require('connect-ensure-login').ensureLoggedIn(),
-    express.static('private')
-);
-
-
-
+<<<<<<< HEAD
 // Pour toutes les autres url (catch all) on renverra l'index.html
 // c'est le routeur coté client qui fera alors le routing
 // app.use(function (req, res) {
@@ -49,6 +40,13 @@ app.use('/private',
 //         .then(body => res.send(body))
 //         .catch(error => console.log("erreur" + error));
 // });
+=======
+// Erreur 404
+app.use(function (req, res) {
+    res.status(404).send("<h1>Erreur 404: Route inexistante</h1>" +
+        "<a href='/trajet/accueil'>Retour à l'accueil</a>");
+});
+>>>>>>> 95ab8eb74246ab9182a10069e5d40ed13f280a99
 
 // Lancement du serveur web
 const server = app.listen(8080, function () {

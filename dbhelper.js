@@ -70,3 +70,7 @@ module.exports.users = {
     create: (nom, prenom, email, phone, photo, password) => run(`insert into UTILISATEUR (Telephone, Mail, Nom, Prenom, MDP, Image) values ('${phone}', '${email}', '${nom}', '${prenom}', '${password}', '${photo}')`),
 };
 
+module.exports.trajets = {
+    //@TODO byHeure, byId, byEtat, byLieuDepart, byLieuArrivee, byConducteur
+};
+
