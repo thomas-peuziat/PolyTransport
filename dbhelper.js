@@ -67,10 +67,25 @@ module.exports.users = {
         checkPassword: (/*password*/) => true,
     }),
     byId: id => get(`select Mail as username from UTILISATEUR where Id_usr = ${id}`),
+    byIdGetName: id => get(`select Nom, Prenom, Id_vehicule from UTILISATEUR where Id_usr=${id}`),
     create: (nom, prenom, email, phone, photo, password) => run(`insert into UTILISATEUR (Telephone, Mail, Nom, Prenom, MDP, Image) values ('${phone}', '${email}', '${nom}', '${prenom}', '${password}', '${photo}')`),
 };
 
 module.exports.trajets = {
-    //@TODO byHeure, byId, byEtat, byLieuDepart, byLieuArrivee, byConducteur
+    byId: id => get(`select Mail as username from UTILISATEUR where Id_usr = ${id}`),
+    //ATTENTION - verifier pour Heure > ...
+    byLieuDepArrHeure: (lieuDep, lieuArr, heure) => get(`select Id_conducteur, Prix, Heure, Heure_Arrivee, Id_lieu_depart, Id_lieu_arrivee from TRAJET where Id_lieu_depart=${lieuDep} and Id_lieu_arrivee=${lieuArr} and Heure > ${heure}`),
+    //ATTENTION : vérifier que les id lieux et id_conducteur existent
+    create: (etat, note, commentaire, km, prix, etatPaiement, idPaypalPaiement, heureDep, heureArr, idLieuDep, idLieuArr, idConducteur, nbPlace) => run(`INSERT INTO TRAJET (Etat, Note, Commentaire, Kilometres, Prix, Etat_payement, Id_paypal_paiement, Heure, Heure_Arrivee, Id_lieu_depart, Id_lieu_arrivee, Id_conducteur, Nb_places)
+    VALUES (${etat}, ${note}, ${commentaire}, ${km}, ${prix}, ${etatPaiement}, ${idPaypalPaiement}, ${heureDep}, ${heureArr}, ${idLieuDep}, ${idLieuArr}, ${idConducteur}, ${nbPlace});`),
 };
 
+module.exports.lieu = {
+    byId: id => get(`select Ville from LIEU where Id_lieu = ${id}`),
+    byVille: ville => get(`select Id_lieu from LIEU where Ville = ${ville}`),
+    create: (ville, complement) => run(`insert into LIEU (Ville, Complement) values (${ville}, ${complement})`),
+};
+
+module.exports.vehicule = {
+    byId: id => get(`select Marque, Modele, Annee from VEHICULE where Id_vehicule = ${id}`),
+};
