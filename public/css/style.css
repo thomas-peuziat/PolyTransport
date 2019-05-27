@@ -74,7 +74,7 @@ a.lien:visited{
     word-wrap: break-word;
 }
 
-#containerWrapper{
+.containerWrapper{
     padding-bottom: 15vw;
 }
 
