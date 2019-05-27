@@ -31,22 +31,11 @@ app.use('/inscription', inscriptionRouter);
 app.use('/trajet', trajetRouter);
 app.use('/proposertrajet', proposerRouter); //added
 
-<<<<<<< HEAD
-// Pour toutes les autres url (catch all) on renverra l'index.html
-// c'est le routeur coté client qui fera alors le routing
-// app.use(function (req, res) {
-//     console.log('all');
-//     template.renderTemplate(template.templates('http://127.0.0.1:8080/public/views/login.mustache'), {})
-//         .then(body => res.send(body))
-//         .catch(error => console.log("erreur" + error));
-// });
-=======
 // Erreur 404
 app.use(function (req, res) {
     res.status(404).send("<h1>Erreur 404: Route inexistante</h1>" +
         "<a href='/trajet/accueil'>Retour à l'accueil</a>");
 });
->>>>>>> 95ab8eb74246ab9182a10069e5d40ed13f280a99
 
 // Lancement du serveur web
 const server = app.listen(8080, function () {
