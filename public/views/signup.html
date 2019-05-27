@@ -30,7 +30,6 @@
     <!-- Mustache ! -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" async></script>
 
-    <!-- @TODO : changer le script  -->
     <script src="/public/js/signup.js" type="module" defer></script>
 </head>
 <body class="bg-secondary">
@@ -40,8 +39,9 @@
 
 
     <div id="sign-up" class="container w-75" onsubmit='return false;'>
-        <form class="form-sign" method="post">
+        <form class="form-sign" onsubmit='return false;'>
             <h1 class="h3 mb-3 font-weight-normal">Inscription</h1>
+            {{#message}}<div  class="alert alert-warning">{{message}}</div>{{/message}}
             <label for="inputNomSU" class="sr-only">Nom</label>
             <input type="text" id="inputNomSU" class="form-control" placeholder="Nom" required="" autofocus="">
 
