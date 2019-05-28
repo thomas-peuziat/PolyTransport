@@ -27,7 +27,7 @@ app.use('/public', express.static('public'));
 app.use('/', indexRouter);
 app.use('/connexion', connexionRouter);
 app.use('/inscription', inscriptionRouter);
-app.use('/trajet', trajetRouter);
+app.use('/trajet', require('connect-ensure-login').ensureLoggedIn('/connexion'), trajetRouter);
 
 // Erreur 404
 app.use(function (req, res) {
