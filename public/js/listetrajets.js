@@ -14,7 +14,8 @@ async function renderListeTrajetsPage(context) {
     let heure_depart =url.searchParams.get('heure_depart');
 
     context = {
-        trajets:[]
+        trajets:[],
+        message:''
     };
 
     fetch('/api/search-trajet/' + lieu_depart + '/' + lieu_arrivee + '/' + heure_depart, {
@@ -30,10 +31,9 @@ async function renderListeTrajetsPage(context) {
                     .then((resp) => {
                         if (resp.success) {
                             context.trajets = resp.trajets;
-                            console.log('context:', context);
-
                             renderTemplate(templates('/public/views/trajet/liste-trajets.html'), context);
                         } else {
+                            context.message = resp.message;
                             renderTemplate(templates('/public/views/trajet/liste-trajets.html'), context);
                         }
                     });

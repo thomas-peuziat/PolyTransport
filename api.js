@@ -67,6 +67,7 @@ module.exports = (passport) => {
     });
 
     // Point d'entrée pour la recherche de trajet
+    // TODO: Faire en sorte que la recherche ne se fasse pas que sur la ville précise
     app.get('/search-trajet/:lieu_depart/:lieu_arrivee/:heure_depart', function (req, res, next) {
         if (!req.params.lieu_depart || !req.params.lieu_arrivee || !req.params.heure_depart)
             return res.send({success: false, message: 'Informations manquantes'});
@@ -74,8 +75,6 @@ module.exports = (passport) => {
         let villeDep = req.params.lieu_depart;
         let villeArr = req.params.lieu_arrivee;
         let heureDep = req.params.heure_depart;
-
-        console.log('depart', req.params.lieu_depart, 'arrivee', req.params.lieu_arrivee, 'heure', req.params.heure_depart);
 
         // Get ID ville départ
         dbHelper.lieu.byVille(villeDep)
@@ -119,9 +118,8 @@ module.exports = (passport) => {
                                         let trajets = [];
 
                                         response.forEach(function (trajet_bd) {
-                                            let heureDepText = heureIntToText(heureDep);
+                                            let heureDepText = heureIntToText(trajet_bd.Heure);
                                             let heureArrText = heureIntToText(trajet_bd.Heure_Arrivee);
-
 
                                             let trajet = {
                                                 prix: trajet_bd.Prix,
@@ -146,19 +144,38 @@ module.exports = (passport) => {
                                         });
 
                                         // On renvoit le json contenant les trajets à afficher sur liste-trajets
-                                        return res.send({success: true, trajets: trajets});
+                                        if(trajets.length > 0) {
+                                            return res.send({
+                                                success: true,
+                                                trajets: trajets
+                                            });
+                                        } else {
+                                            return res.send({
+                                                success: false,
+                                                message: 'Aucun trajet disponible'
+                                            });
+                                        }
                                     });
                             })
-                            .catch(function (error) {
-                                return res.send({success: false, message: 'Pas de trajets disponibles'});
+                            .catch(function () {
+                                return res.send({
+                                    success: false,
+                                    message: 'Pas de trajet disponible'
+                                });
                             });
                     })
-                    .catch(function (error) {
-                        return res.send({success: false, message: 'Ville arrivée inexistante:' + error});
+                    .catch(function () {
+                        return res.send({
+                            success: false,
+                            message: 'Lieu arrivée inexistant'
+                        });
                     });
             })
-            .catch(function (error) {
-                return res.send({success: false, message: 'Ville depart inexistante:' + error});
+            .catch(function () {
+                return res.send({
+                    success: false,
+                    message: 'Lieu départ inexistant\n'
+                });
             });
     });
 

@@ -22,26 +22,3 @@ async function renderRechercherPage(context) {
         document.location.href = '/trajet/liste-trajets' + '?lieu_depart=' + lieu_depart + '&lieu_arrivee=' + lieu_arrivee  + '&heure_depart=' + numHeure_depart;
     });
 }
-
-/*fetch('/api/search-trajet', {
-    headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    },
-    method: 'POST',
-    body: 'lieu_depart=' + lieu_depart + '&lieu_arrivee=' + lieu_arrivee + '&date_depart=' + date_depart + '&heure_depart=' + heure_depart,
-})
-    .then(function (response) {
-        if (response.ok) {
-            response.json()
-                .then((resp) => {
-                    if (resp.success) {
-                        document.location.href = '/trajet/liste-trajets' + '?lieu_depart=' + lieu_depart + '&lieu_arrivee=' + lieu_arrivee + '&date_depart=' + date_depart + '&heure_depart=' + heure_depart;
-                    }
-                    else {
-                        console.log("erreur");
-                        document.location.href = '/trajet/rechercher';
-                    }
-                });
-        }
-    });*/
