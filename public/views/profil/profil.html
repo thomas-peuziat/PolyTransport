@@ -28,7 +28,7 @@
     <!-- Mustache ! -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" async></script>
 
-    <!--    <script src="../js/main.js" defer="defer"></script>-->
+       <script src="/public/js/profil.js" type="module" defer="defer"></script>
 </head>
 <body class="bg-secondary">
 <div id="wrapper" class="w-100 bg-light">
@@ -36,18 +36,19 @@
     {{>topbar}}
 
     <div id="profil" class="container w-75">
-        <form class="form-sign" method="post">
+        <form class="form-sign" onsubmit="return false;">
             <h1 class="h3 mb-3 font-weight-normal">Profil</h1>
+            {{#message}}<div  class="alert alert-warning">{{message}}</div>{{/message}}
             <div class="m-3 row">
                 <img class="col-3" src="http://127.0.0.1:8080/public/img/baseline-account_circle-24px.svg" alt="photo de profil">
                 <div class="col row">
 
                     <label for="inputNameM" class="col font-weight-bold">Nom</label>
-                    <input type="text" id="inputNameM" class="col form-control" placeholder="Nom de l'user modifiable"
+                    <input type="text" id="inputNameM" class="col form-control" placeholder="Nom de l'user modifiable" value="{{Nom}}"
                            required>
 
                     <label for="inputPrenomM" class="col font-weight-bold">Prénom</label>
-                    <input type="text" id="inputPrenomM" class="col form-control"
+                    <input type="text" id="inputPrenomM" class="col form-control" value="{{Prenom}}"
                            placeholder="Prénom de l'user modifiable" required>
 
                 </div>
@@ -56,15 +57,15 @@
                 <h4 class="container-fluid border-bottom font-weight-bold">Informations</h4>
                 <div class="m-3">
                     <span><label for="inputDdnM">Date de naissance</label><input class="col form-control" type="date"
-                                                                                 id="inputDdnM" required></span>
+                                                                                 id="inputDdnM" value="{{DDN}}" required></span>
                     <span><label for="inputPhoneM">Numéro de téléphone</label><input type="tel" id="inputPhoneM"
                                                                                      class="col form-control"
                                                                                      placeholder="N° de l'user"
-                                                                                     pattern="[0-9]{10}"
+                                                                                     pattern="[0-9]{10}" value="{{Telephone}}"
                                                                                      required></span>
                     <span><label for="inputEmailM">Adresse email</label><input type="email" id="inputEmailM"
                                                                                class="col form-control"
-                                                                               placeholder="Email user" required></span>
+                                                                               placeholder="Email user" value="{{Mail}}" required></span>
                 </div>
             </div>
 

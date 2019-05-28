@@ -19,7 +19,7 @@ const db = new sqlite3.Database('./PolyTransport.db', sqlite3.OPEN_READWRITE, fu
 // Rend la fonction get de l'api sqlite compatible avec les promesses
 const get = sql => new Promise(function (resolve, reject) {
     db.get(sql, function (err, row) {
-        
+        console.log(sql);
         if (err) {
             reject(err);
         }
@@ -67,10 +67,13 @@ module.exports.users = {
         checkPassword: (/*password*/) => true,
     }),
     byId: id => get(`select Mail as username from UTILISATEUR where Id_usr = ${id}`),
+    infosById: (id, id_vehicule) => get(`select Nom, Prenom, DDN, Telephone, Mail, Marque, Modele from UTILISATEUR, VEHICULE where Id_usr = ${id} and VEHICULE.Id_vehicule = ${id_vehicule} `),
+    infosById: (id) => get(`select Nom, Prenom, DDN, Telephone, Mail from UTILISATEUR where Id_usr = ${id}`),
+    vehiculeById: id => get(`select Id_vehicule from UTILISATEUR where Id_usr = ${id}`),
     create: (nom, prenom, email, phone, photo, password) => run(`insert into UTILISATEUR (Telephone, Mail, Nom, Prenom, MDP, Image) values ('${phone}', '${email}', '${nom}', '${prenom}', '${password}', '${photo}')`),
+    update : (id, nom, prenom, email, phone, DDN) => run(`update UTILISATEUR set Nom = '${nom}', Prenom = '${prenom}', Mail = '${email}', Telephone = '${phone}', DDN = '${DDN}' where Id_usr = ${id} `)
 };
 
 module.exports.trajets = {
     //@TODO byHeure, byId, byEtat, byLieuDepart, byLieuArrivee, byConducteur
 };
-

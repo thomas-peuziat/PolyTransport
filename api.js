@@ -66,6 +66,58 @@ module.exports = (passport) => {
         );
     });
 
+    app.get('/profil/:id_usr', function (req, res, next) {
+        dbHelper.users.vehiculeById(req.params.id_usr).then(
+            id_vehicule => {
+                console.log(id_vehicule);
+                if(id_vehicule) {
+                    dbHelper.users.infosById(req.params.id_usr, id_vehicule).then(
+                        infos => {
+                            console.log(infos);
+                            res.set('Content-type', 'application/json');
+                            res.send(JSON.stringify(infos));
+                        },
+                        err => {
+                            next(err);
+                        },
+                    );
+                }else {
+                    dbHelper.users.infosById(req.params.id_usr).then(
+                        infos => {
+                            console.log(infos);
+                            res.set('Content-type', 'application/json');
+                            res.send(JSON.stringify(infos));
+                        },
+                        err => {
+                            next(err);
+                        },
+                    );
+                }
+
+            },
+            err => {
+                next(err);
+            },
+        );
+
+
+    });
+
+    app.put('/profil/:id_usr', function (req, res, next) {
+        if (!req.body.nom || !req.body.prenom || !req.body.email || !req.body.phone || !req.body.DDN)
+            return res.send({success: false, message: 'Informations manquantes'});
+        
+        dbHelper.users.update(req.params.id_usr, req.body.nom, req.body.prenom, req.body.email, req.body.phone, req.body.DDN).then(
+            result => {
+                res.send({success: true, message: "Mise à jour de votre profil"});
+            },
+            err => {
+                res.send({success: false, message: 'bad request'});
+                next(err);
+            },
+        );
+    });
+
     // Point d'entrée pour la recherche de trajet
     app.post('/search-trajet', function (req, res, next) {
         if (!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.date_depart || !req.body.heure_depart)
