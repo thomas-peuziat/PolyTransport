@@ -11,9 +11,7 @@ async function renderLoginPage(context) {
     const submit_btn = document.querySelector('#login-btn');
 
     submit_btn.addEventListener('click', function () {
-        console.log(document.body);
         const username = document.querySelector('#inputEmail').value;
-        console.log(username);
         const password = document.querySelector('#inputPassword').value;
         fetch('/api/connexion', {
             headers: {
@@ -24,7 +22,6 @@ async function renderLoginPage(context) {
             body: 'username=' + username + '&password=' + password,
         })
         .then(function (response) {
-            console.log(response);
             if (response.ok) {
                 response.json()
                 .then((resp) => {
