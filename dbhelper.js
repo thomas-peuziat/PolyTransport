@@ -75,7 +75,7 @@ module.exports.trajets = {
     byId: id => get(`select Mail as username from UTILISATEUR where Id_usr = ${id}`),
     //ATTENTION - verifier pour Heure > ...
     byLieuDepArrHeure: (lieuDep, lieuArr, heure) =>
-        all(`select Id_conducteur, Prix, Heure_Arrivee, Nb_places, Id_trajet from TRAJET 
+        all(`select Id_conducteur, Prix, Heure, Heure_Arrivee, Nb_places, Id_trajet from TRAJET 
             where Id_lieu_depart=${lieuDep} 
               and Id_lieu_arrivee=${lieuArr} 
               and Heure > ${heure}`),

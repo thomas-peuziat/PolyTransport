@@ -34,13 +34,19 @@
 <div id="wrapper" class="w-100 bg-light">
 
     {{>topbar}}
-    <a href="">
+    <a href="/trajet/rechercher">
         <button type="button" class="ml-3 mt-3 pl-4 pr-4 btn btn-primary go-back">
             <img src="/public/img/vectorpaint.svg" alt="go_back">
         </button>
     </a>
 
     <div class="containerWrapper">
+        {{#message}}
+        <div class="alert alert-danger" role="alert" id="alert-error">
+            {{message}}
+        </div>
+        {{/message}}
+
         {{#trajets}}
 
         <div class="m-3">
