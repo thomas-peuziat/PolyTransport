@@ -96,7 +96,6 @@ module.exports = (passport) => {
                                 // Get tous les conducteurs des trajets
                                 response.forEach(function (trajet){
                                     let conducteur = [trajet.Id_trajet];
-                                    //console.log(conducteur[0]);
 
                                     promises.push(
                                         new Promise(resolve => {
@@ -146,7 +145,7 @@ module.exports = (passport) => {
 
                                         });
 
-                                        console.log('trajets:', trajets);
+                                        // On renvoit le json contenant les trajets à afficher sur liste-trajets
                                         return res.send({success: true, trajets: trajets});
                                     });
                             })
@@ -161,46 +160,6 @@ module.exports = (passport) => {
             .catch(function (error) {
                 return res.send({success: false, message: 'Ville depart inexistante:' + error});
             });
-
-        /*dbHelper.trajets.byLieuDepArrHeure(req.params.lieu_depart, req.params.lieu_arrivee, req.params.heure_depart)
-            .then((response) => {
-
-                console.log('response:', response);
-
-
-                /!*let trajets = {
-                    prix: response.prix,
-                    nbPlaces: response.Nb_places,
-                    conducteur: {
-                        nom: '',
-                        prenom: ''
-                    },
-                    depart: {
-                        lieu:'',
-                        heure:''
-                    },
-                    arrivee: {
-                        lieu:'',
-                        heure:''
-                    },
-                };
-                let idConducteur = response.Id_conducteur;
-
-                let idLieuDepart = response.Id_lieu_depart;
-                let idLieuArrivee = response.Id_lieu_arrivee;
-
-                dbHelper.users.byIdGetName(idConducteur)
-                    .then((response) => {
-                        trajets.
-                    });
-                *!/
-                //return res.send({success: true, trajets: trajets});
-            })
-            .catch(function (error) {
-                return res.send({success: false, message: 'Erreur, rien ne va plus:' + error});
-            });*/
-
-        //return res.send({success: false, message: 'Erreur, rien ne va plus'});
     });
 
 
