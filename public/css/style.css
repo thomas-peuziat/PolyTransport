@@ -81,3 +81,7 @@ a.lien:visited{
 #creer-trajet {
     padding-bottom: 20vw;
 }
+
+#vehicule_details {
+    display : none;
+}

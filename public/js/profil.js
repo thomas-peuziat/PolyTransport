@@ -21,8 +21,12 @@ async function getInfoUser(idUsr, context) {
 async function renderProfilPage(context) {
     console.log(context);
     await renderTemplate(templates('/public/views/profil/profil.html'), context);
-
     const submit_btn = document.querySelector('.btn');
+
+    const input_vehicule = document.querySelector('#inputVoiture');
+    input_vehicule.addEventListener('focus', function () {
+        document.querySelector('#vehicule_details').style.display = 'block';
+    });
 
     submit_btn.addEventListener('click', function () {
         const nom = document.querySelector('#inputNameM').value;
