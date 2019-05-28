@@ -3,9 +3,9 @@
 import { renderTemplate, templates } from './templatefunction.js';
 
 let context = {};
-renderRechercherPage(context);
+renderProposerPage(context);
 
-async function renderRechercherPage(context) {
+async function renderProposerPage(context) {
     await renderTemplate(templates('/public/views/trajet/proposer-trajet.html'), context);
 
     const proposer = document.querySelector('#proposer-btn');
@@ -31,12 +31,11 @@ async function renderRechercherPage(context) {
                     response.json()
                         .then((resp) => {
                             if (resp.success) {
-                                console.log("succès");
-                                //document.location.href = '/trajet/accueil';
+                                renderProposerPage({...context, messageValide: resp.messageValide});
+
                             }
                             else {
-                                console.log("erreur");
-                                //document.location.href = '/trajet/accueil'; 
+                                renderProposerPage({...context, messageErreur: resp.messageErreur});
                             }
                         });
                 }

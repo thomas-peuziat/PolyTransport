@@ -116,33 +116,35 @@ module.exports = (passport) => {
 
         dbHelper.lieu.byVille(req.body.lieu_depart).then( idLieuDep => {
             if(typeof idLieuDep === "undefined"){
-                //inserer en bdd + getId
+                //inserer en bdd si inexistant
+                dbHelper.lieu.create(req.body.lieu_depart);
+                return res.send({succes: false, messageErreur: 'Votre lieu de départ vient d\'être ajouté en BD. Veuillez réitérer votre demande'});
             }
             dbHelper.lieu.byVille(req.body.lieu_arrivee).then(idLieuArr =>{
                 if(typeof idLieuArr === "undefined"){
-                    //inserer en bdd + getId
+                    //inserer en bdd si inexistant
+                    dbHelper.lieu.create(req.body.lieu_arrivee);            
+                    return res.send({succes: false, messageErreur: 'Votre lieu d\'arrivée vient d\'être ajouté en BD. Veuillez réitérer votre demande'});
                 }
                 dbHelper.trajets.create(0, null, null, 0, req.body.prix, 0, '', req.body.heure_depart, 0,
                     idLieuDep.Id_lieu, idLieuArr.Id_lieu, idConducteur, req.body.nbPlaces)
                     .then(
                         result => {
-                            console.log("succes ajout BDD");
-                            res.send({success: true});                  
+                            res.send({success: true, messageValide: 'Votre trajet a bien été ajouté'});                  
                         },
                         err => {
-                            console.log("erreur ajout BDD");
-                            res.send({success: false, message: 'bad request'});
+                            res.send({success: false, messageErreur: 'bad request'});
                             next(err);
                         },
                     ).catch(function(error){
-                        return res.send({succes: false, message: "ErreurAjout "+error});
+                        return res.send({succes: false, messageErreur: 'BDD error ' +error});
                     });
 
             }).catch(function(error){
-                return res.send({success: false, message: "Ville d'arrivée inexistante "+error});
+                return res.send({success: false, messageErreur: 'Ville d\'arrivée inexistante '+error});
             });
         }).catch(function(error){
-            return res.send({success: false, message: "Ville de départ inexistante "+error});
+            return res.send({success: false, messageErreur: 'Ville de départ inexistante '+error});
         });
     });
     
