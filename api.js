@@ -107,37 +107,43 @@ module.exports = (passport) => {
     });
 
 
-    //Point d'entrée pour la recherche de trajet
+    //Point d'entrée pour l'ajout de trajet
     app.post('/propose-trajet', function(req, res, next){
-        if(!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.date_depart || !req.body.heure_depart || !req.body.nbPlaces)
+        if(!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.prix || !req.body.heure_depart || !req.body.nbPlaces)
             return res.send({success: false, message: 'Informations manquantes'});
         
-        //faire les requetes avec les données 
-        let idLieuDep;
-        let idLieuArr;
-        let idConducteur = 0;        //Récupérer l'id conducteur
+        let idConducteur = req.session.passport.user;        //Récupérer l'id conducteur
 
-        dbHelper.lieu.byVille(req.body.lieu_depart).then( res => idLieuDep = res);
+        dbHelper.lieu.byVille(req.body.lieu_depart).then( idLieuDep => {
+            if(typeof idLieuDep === "undefined"){
+                //inserer en bdd + getId
+            }
+            dbHelper.lieu.byVille(req.body.lieu_arrivee).then(idLieuArr =>{
+                if(typeof idLieuArr === "undefined"){
+                    //inserer en bdd + getId
+                }
+                dbHelper.trajets.create(0, null, null, 0, req.body.prix, 0, '', req.body.heure_depart, 0,
+                    idLieuDep.Id_lieu, idLieuArr.Id_lieu, idConducteur, req.body.nbPlaces)
+                    .then(
+                        result => {
+                            console.log("succes ajout BDD");
+                            res.send({success: true});                  
+                        },
+                        err => {
+                            console.log("erreur ajout BDD");
+                            res.send({success: false, message: 'bad request'});
+                            next(err);
+                        },
+                    ).catch(function(error){
+                        return res.send({succes: false, message: "ErreurAjout "+error});
+                    });
 
-        dbHelper.lieu.byVille(req.body.lieu_arrivee).then(res => idLieuArr = res);
-        
-        // req.session.passport.user
-        //Récupérer l'id conducteur
-        // dbHelper.user.byId().then(res => idConducteur =  );
-        if(idLieuArr!=null && idLieuDep!=null /*&& idConducteur != null*/){
-            dbHelper.users.create(null, null, null, null, req.body.prix, null, null, req.body.heure_depart, null,
-                idLieuDep, idLieuArr, idConducteur, req.body.nbPlaces)
-                .then(
-                    result => {
-                        res.send({success: true});                  
-                    },
-                    err => {
-                        res.send({success: false, message: 'bad request'});
-                        next(err);
-                    },
-            );
-        }
-        return res.send({success: true});
+            }).catch(function(error){
+                return res.send({success: false, message: "Ville d'arrivée inexistante "+error});
+            });
+        }).catch(function(error){
+            return res.send({success: false, message: "Ville de départ inexistante "+error});
+        });
     });
     
     return app;
