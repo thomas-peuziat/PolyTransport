@@ -169,39 +169,74 @@ module.exports = (passport) => {
             return res.send({success: false, message: 'Informations manquantes'});
         
         let idConducteur = req.session.passport.user;        //Récupérer l'id conducteur
+ 
+        let promises = [];
 
-        dbHelper.lieu.byVille(req.body.lieu_depart).then( idLieuDep => {
-            if(typeof idLieuDep === "undefined"){
-                //inserer en bdd si inexistant
-                dbHelper.lieu.create(req.body.lieu_depart);
-                return res.send({succes: false, messageErreur: 'Votre lieu de départ vient d\'être ajouté en BD. Veuillez réitérer votre demande'});
-            }
-            dbHelper.lieu.byVille(req.body.lieu_arrivee).then(idLieuArr =>{
-                if(typeof idLieuArr === "undefined"){
-                    //inserer en bdd si inexistant
-                    dbHelper.lieu.create(req.body.lieu_arrivee);            
-                    return res.send({succes: false, messageErreur: 'Votre lieu d\'arrivée vient d\'être ajouté en BD. Veuillez réitérer votre demande'});
-                }
-                dbHelper.trajets.create(0, null, null, 0, req.body.prix, 0, '', req.body.heure_depart, 0,
-                    idLieuDep.Id_lieu, idLieuArr.Id_lieu, idConducteur, req.body.nbPlaces)
-                    .then(
-                        result => {
-                            res.send({success: true, messageValide: 'Votre trajet a bien été ajouté'});                  
-                        },
-                        err => {
-                            res.send({success: false, messageErreur: 'bad request'});
-                            next(err);
-                        },
-                    ).catch(function(error){
-                        return res.send({succes: false, messageErreur: 'BDD error ' +error});
-                    });
+        promises.push(
+            new Promise(resolve => {
+                dbHelper.lieu.byVille(req.body.lieu_depart)
+                .then( idLieuDep => {
+                    if(typeof idLieuDep === "undefined"){
+                        //inserer en bdd si inexistant
+                        dbHelper.lieu.create(req.body.lieu_depart)
+                        .then(()=>{
+                            dbHelper.lieu.byVille(req.body.lieu_depart)
+                            .then(idLieuDep=>{
+                                resolve(idLieuDep);
+                            });
+                        });
+                    }else{
+                        resolve(idLieuDep);
+                    }
+                }).catch(function(error){
+                    return res.send({success: false, messageErreur: 'Erreur Base de données '+ error});
+                });
+            })
+        );
 
-            }).catch(function(error){
-                return res.send({success: false, messageErreur: 'Ville d\'arrivée inexistante '+error});
+        promises.push(
+            new Promise(resolve => {
+                dbHelper.lieu.byVille(req.body.lieu_arrivee)
+                .then(idLieuArr =>{
+                    if(typeof idLieuArr === "undefined"){
+                        //inserer en bdd si inexistant
+                        dbHelper.lieu.create(req.body.lieu_arrivee)
+                        .then(()=>{
+                            dbHelper.lieu.byVille(req.body.lieu_arrivee)
+                            .then(idLieuArr=>{
+                                resolve(idLieuArr);
+                            });
+                        });            
+                    }else{
+                        resolve(idLieuArr);
+                    }
+                }).catch(function(error){
+                    return res.send({success: false, messageErreur: 'Erreur Base de données '+ error});
+                });
+            })
+        );
+
+
+        Promise.all(promises)
+        .then((ids) => {
+            let idLieuDep = ids[0].Id_lieu;
+            let idLieuArr = ids[1].Id_lieu;
+             
+            dbHelper.trajets.create(0, null, null, 0, req.body.prix, 0, '', req.body.heure_depart, 0,
+            idLieuDep, idLieuArr, idConducteur, req.body.nbPlaces)
+            .then(
+                result => {
+                    res.send({success: true, messageValide: 'Votre trajet a bien été ajouté'});                  
+                },
+                err => {
+                    res.send({success: false, messageErreur: 'bad request'});
+                    next(err);
+                },
+            ).catch(function(error){
+                return res.send({succes: false, messageErreur: 'BDD error ' +error});
             });
-        }).catch(function(error){
-            return res.send({success: false, messageErreur: 'Ville de départ inexistante '+error});
         });
+
     });
     
     return app;
