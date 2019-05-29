@@ -15,7 +15,6 @@ const connexionRouter = require('./routes/connexionroute');
 const inscriptionRouter = require('./routes/inscriptionroute');
 const trajetRouter = require('./routes/trajetroute');
 const profilRouter = require('./routes/profilroute');
-//const proposerRouter = require('./routes/proposerroute'); //added
 // on met en place une authentification valide pour toute le site
 const passport = auth(app);
 
@@ -29,7 +28,7 @@ app.use('/public', express.static('public'));
 app.use('/', indexRouter);
 app.use('/connexion', connexionRouter);
 app.use('/inscription', inscriptionRouter);
-app.use('/trajet', trajetRouter);
+app.use('/trajet', require('connect-ensure-login').ensureLoggedIn('/connexion'), trajetRouter);
 app.use('/profil', require('connect-ensure-login').ensureLoggedIn('/connexion'), profilRouter)
 //app.use('/proposertrajet', proposerRouter); //added
 
