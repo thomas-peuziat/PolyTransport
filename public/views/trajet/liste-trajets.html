@@ -48,7 +48,6 @@
         {{/message}}
 
         {{#trajets}}
-
         <div class="m-3">
             <div class="card">
                 <div class="card-header">
@@ -58,15 +57,15 @@
                     <h5 class="card-title">{{depart.lieu}} <img src="/public/img/baseline-arrow_right_alt-24px.svg" alt="right arrow"> {{arrivee.lieu}}</h5>
                     <p class="card-text">Heure départ : {{depart.heure}} / Heure arrivée : {{arrivee.heure}}</p>
                     <p class="card-text">Nombre de places : {{nbPlaces}}</p>
+                    <a href="/trajet/{{id}}" class="float-right">
+                        <button class="btn btn-success">Détails...</button>
+                    </a>
                 </div>
             </div>
         </div>
-
         {{/trajets}}
     </div>
-
     {{>navbar}}
-
 
 </div>
 

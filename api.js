@@ -122,13 +122,14 @@ module.exports = (passport) => {
                                             let heureArrText = heureIntToText(trajet_bd.Heure_Arrivee);
 
                                             let trajet = {
+                                                id: trajet_bd.Id_trajet,
                                                 prix: trajet_bd.Prix,
                                                 nbPlaces: trajet_bd.Nb_places,
                                                 conducteur: {
                                                     nom: mapTrajetConducteur.get(trajet_bd.Id_trajet).Nom,
                                                     prenom: mapTrajetConducteur.get(trajet_bd.Id_trajet).Prenom,
                                                     //vehicule: mapTrajetConducteur.get(trajet_bd.Id_trajet).Id_vehicule
-                                                    //id: mapTrajetConducteur.get(trajet_bd.Id_trajet).id
+                                                    id: mapTrajetConducteur.get(trajet_bd.Id_trajet).Id_conducteur
                                                 },
                                                 depart: {
                                                     lieu:villeDep,
