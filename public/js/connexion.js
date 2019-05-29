@@ -26,14 +26,6 @@ async function renderLoginPage(context) {
                 response.json()
                 .then((resp) => {
                     if (resp.success) {
-                        //renderTemplate(templates('/public/views/signup.html'), {});
-                        // fetch('/connexion', {
-                        //     headers: {
-                        //         'Accept': 'application/json',
-                        //         'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-                        //     },
-                        //     method: 'POST',
-                        // }).then(res => res);
                         document.location.href = '/trajet/accueil';
                     }
                     else {

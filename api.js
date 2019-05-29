@@ -2,7 +2,7 @@
 'use strict';
 
 // Ce module nodejs gère l'API de notre site
-// Il définit l'ensemble des routes (relative à "/api") corresponant aux
+// Il définit l'ensemble des routes (relative à '/api') corresponant aux
 // points d'entrée de l'API
 
 // Expressjs
@@ -11,8 +11,8 @@ const express = require('express');
 const dbHelper = require('./dbhelper.js');
 
 // Comme c'est un module nodejs il faut exporter les fonction qu'on veut rendre publiques
-// ici on n'exporte qu'ne seule fonction (anonyme) qui est le "constructeur" du module
-// Cette fonction prend en paramètre un objet "passport" pour la gestion de l'authentification
+// ici on n'exporte qu'ne seule fonction (anonyme) qui est le 'constructeur' du module
+// Cette fonction prend en paramètre un objet 'passport' pour la gestion de l'authentification
 module.exports = (passport) => {
     const app = express();
 
@@ -64,6 +64,106 @@ module.exports = (passport) => {
                 next(err);
             },
         );
+    });
+
+    app.get('/profil/:id_usr', function (req, res, next) {
+        dbHelper.users.vehiculeById(req.params.id_usr).then(
+            id_vehicule => {
+                console.log(id_vehicule);
+                if(id_vehicule) {
+                    console.log('bite');
+                    dbHelper.users.infosById(req.params.id_usr, id_vehicule.Id_vehicule).then(
+                        infos => {
+                            console.log(infos);
+                            res.set('Content-type', 'application/json');
+                            res.send(JSON.stringify(infos));
+                        },
+                        err => {
+                            next(err);
+                        },
+                    );
+                }else {
+                    dbHelper.users.infosByIdSansV(req.params.id_usr).then(
+                        infos => {
+                            console.log(infos);
+                            res.set('Content-type', 'application/json');
+                            res.send(JSON.stringify(infos));
+                        },
+                        err => {
+                            next(err);
+                        },
+                    );
+                }
+
+            },
+            err => {
+                next(err);
+            },
+        );
+
+
+    });
+
+    app.put('/profil/:id_usr', function (req, res, next) {
+        // if (!req.body.nom || !req.body.prenom || !req.body.email || !req.body.phone || !req.body.DDN)
+        //     return res.send({success: false, message: 'Informations manquantes'});
+        if (req.body.marque) {
+            dbHelper.vehicule.search(req.body.marque, req.body.modele, req.body.annee).then(result => {
+                let data = JSON.stringify(result);
+                console.log(data);
+                if (typeof data === 'undefined') {
+                    dbHelper.vehicule.create(req.body.marque, req.body.modele, req.body.annee).then(result => {
+                        dbHelper.vehicule.search(req.body.marque, req.body.modele, req.body.annee).then(result => {
+                            console.log(result);
+                            dbHelper.users.update(req.params.id_usr, req.body.nom, req.body.prenom, req.body.email, req.body.phone, req.body.DDN, result.Id_vehicule).then(
+                                result => {
+                                    res.send({success: true, message: 'Mise à jour de votre profil'});
+                                },
+                                err => {
+                                    res.send({success: false, message: 'bad request'});
+                                    next(err);
+                                },
+                            ).catch(function(error){
+                                return res.send({success: false, message: 'Erreur Base de données '+ error});
+                            });
+            
+                        }).catch(function(error){
+                            return res.send({success: false, message: 'Erreur Base de données '+ error});
+                        });
+        
+                    }).catch(function(error){
+                        return res.send({success: false, message: 'Erreur Base de données '+ error});
+                    });
+    
+                } else {
+                    dbHelper.users.update(req.params.id_usr, req.body.nom, req.body.prenom, req.body.email, req.body.phone, req.body.DDN, result.Id_vehicule).then(
+                        result => {
+                            res.send({success: true, message: 'Mise à jour de votre profil'});
+                        },
+                        err => {
+                            res.send({success: false, message: 'bad request'});
+                            next(err);
+                        },
+                    ).catch(function(error){
+                        return res.send({success: false, message: 'Erreur Base de données '+ error});
+                    });
+    
+                }
+            });
+        } else {
+            dbHelper.users.updateSansV(req.params.id_usr, req.body.nom, req.body.prenom, req.body.email, req.body.phone, req.body.DDN).then(
+                result => {
+                    res.send({success: true, message: 'Mise à jour de votre profil'});
+                },
+                err => {
+                    res.send({success: false, message: 'bad request'});
+                    next(err);
+                },
+            ).catch(function(error){
+                return res.send({success: false, message: 'Erreur Base de données '+ error});
+            });
+        }
+        
     });
 
     // Point d'entrée pour la recherche de trajet
@@ -187,39 +287,74 @@ module.exports = (passport) => {
             return res.send({success: false, message: 'Informations manquantes'});
         
         let idConducteur = req.session.passport.user;        //Récupérer l'id conducteur
+ 
+        let promises = [];
 
-        dbHelper.lieu.byVille(req.body.lieu_depart).then( idLieuDep => {
-            if(typeof idLieuDep === "undefined"){
-                //inserer en bdd si inexistant
-                dbHelper.lieu.create(req.body.lieu_depart);
-                return res.send({succes: false, messageErreur: 'Votre lieu de départ vient d\'être ajouté en BD. Veuillez réitérer votre demande'});
-            }
-            dbHelper.lieu.byVille(req.body.lieu_arrivee).then(idLieuArr =>{
-                if(typeof idLieuArr === "undefined"){
-                    //inserer en bdd si inexistant
-                    dbHelper.lieu.create(req.body.lieu_arrivee);            
-                    return res.send({succes: false, messageErreur: 'Votre lieu d\'arrivée vient d\'être ajouté en BD. Veuillez réitérer votre demande'});
-                }
-                dbHelper.trajets.create(0, null, null, 0, req.body.prix, 0, '', req.body.heure_depart, 0,
-                    idLieuDep.Id_lieu, idLieuArr.Id_lieu, idConducteur, req.body.nbPlaces)
-                    .then(
-                        result => {
-                            res.send({success: true, messageValide: 'Votre trajet a bien été ajouté'});                  
-                        },
-                        err => {
-                            res.send({success: false, messageErreur: 'bad request'});
-                            next(err);
-                        },
-                    ).catch(function(error){
-                        return res.send({succes: false, messageErreur: 'BDD error ' +error});
-                    });
+        promises.push(
+            new Promise(resolve => {
+                dbHelper.lieu.byVille(req.body.lieu_depart)
+                .then( idLieuDep => {
+                    if(typeof idLieuDep === "undefined"){
+                        //inserer en bdd si inexistant
+                        dbHelper.lieu.create(req.body.lieu_depart)
+                        .then(()=>{
+                            dbHelper.lieu.byVille(req.body.lieu_depart)
+                            .then(idLieuDep=>{
+                                resolve(idLieuDep);
+                            });
+                        });
+                    }else{
+                        resolve(idLieuDep);
+                    }
+                }).catch(function(error){
+                    return res.send({success: false, messageErreur: 'Erreur Base de données '+ error});
+                });
+            })
+        );
 
-            }).catch(function(error){
-                return res.send({success: false, messageErreur: 'Ville d\'arrivée inexistante '+error});
+        promises.push(
+            new Promise(resolve => {
+                dbHelper.lieu.byVille(req.body.lieu_arrivee)
+                .then(idLieuArr =>{
+                    if(typeof idLieuArr === "undefined"){
+                        //inserer en bdd si inexistant
+                        dbHelper.lieu.create(req.body.lieu_arrivee)
+                        .then(()=>{
+                            dbHelper.lieu.byVille(req.body.lieu_arrivee)
+                            .then(idLieuArr=>{
+                                resolve(idLieuArr);
+                            });
+                        });            
+                    }else{
+                        resolve(idLieuArr);
+                    }
+                }).catch(function(error){
+                    return res.send({success: false, messageErreur: 'Erreur Base de données '+ error});
+                });
+            })
+        );
+
+
+        Promise.all(promises)
+        .then((ids) => {
+            let idLieuDep = ids[0].Id_lieu;
+            let idLieuArr = ids[1].Id_lieu;
+             
+            dbHelper.trajets.create(0, null, null, 0, req.body.prix, 0, '', req.body.heure_depart, 0,
+            idLieuDep, idLieuArr, idConducteur, req.body.nbPlaces)
+            .then(
+                result => {
+                    res.send({success: true, messageValide: 'Votre trajet a bien été ajouté'});                  
+                },
+                err => {
+                    res.send({success: false, messageErreur: 'bad request'});
+                    next(err);
+                },
+            ).catch(function(error){
+                return res.send({succes: false, messageErreur: 'BDD error ' +error});
             });
-        }).catch(function(error){
-            return res.send({success: false, messageErreur: 'Ville de départ inexistante '+error});
         });
+
     });
     
     return app;
