@@ -97,11 +97,7 @@ module.exports.lieu = {
 };
 
 module.exports.vehicule = {
-<<<<<<< HEAD
     search: (marque, modele, annee) => get(`select Id_vehicule from VEHICULE where Marque = '${marque}' and  Modele = '${modele}' and Annee = ${annee} `),
-    create: (marque, modele, annee) => run(`insert into VEHICULE (Marque, Modele, Annee) values ('${marque}', '${modele}', ${annee} )`)
-};
-=======
+    create: (marque, modele, annee) => run(`insert into VEHICULE (Marque, Modele, Annee) values ('${marque}', '${modele}', ${annee} )`),
     byId: id => get(`select Marque, Modele, Annee from VEHICULE where Id_vehicule = ${id}`),
 };
->>>>>>> 381e2733d32c0522a4c10edc7384dc074fb4b488
