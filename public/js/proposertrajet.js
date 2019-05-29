@@ -3,21 +3,20 @@
 import { renderTemplate, templates } from './templatefunction.js';
 
 let context = {};
-renderRechercherPage(context);
+renderProposerPage(context);
 
-async function renderRechercherPage(context) {
+async function renderProposerPage(context) {
     await renderTemplate(templates('/public/views/trajet/proposer-trajet.html'), context);
 
     const proposer = document.querySelector('#proposer-btn');
-
     proposer.addEventListener('click', function () {
 
         const lieu_depart = document.querySelector('#inputDeparture').value;
         const lieu_arrivee = document.querySelector('#inputArrival').value;
-        const date_depart = document.querySelector('#inputDate').value;
-        const heure_depart = document.querySelector('#inputHour').value;
-        const modele_voiture = document.querySelector("#inputVoiture").value;
-        const nbPassagers = document.querySelector("#inputPassagers").value;
+        const prix = document.querySelector('#inputPrix').value;
+        const heure_depart_non_parsed = document.querySelector('#inputHour').value;
+        const heure_depart = parseInt(heure_depart_non_parsed[0] + heure_depart_non_parsed[1] + heure_depart_non_parsed[3] + heure_depart_non_parsed[4]);
+        const nbPlaces = document.querySelector("#inputPassagers").value;
 
         fetch('/api/propose-trajet', {
             headers: {
@@ -25,18 +24,18 @@ async function renderRechercherPage(context) {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
             },
             method: 'POST',
-            body: 'lieu_depart=' + lieu_depart + '&lieu_arrivee=' + lieu_arrivee + '&date_depart=' + date_depart + '&heure_depart=' + heure_depart + '&modele_voiture=' + modele_voiture + '&nbPassagers=' + nbPassagers,
+            body: 'lieu_depart=' + lieu_depart + '&lieu_arrivee=' + lieu_arrivee + '&prix=' + prix + '&heure_depart=' + heure_depart + '&nbPlaces=' + nbPlaces,
         })
             .then(function (response) {
                 if (response.ok) {
                     response.json()
                         .then((resp) => {
                             if (resp.success) {
-                                //enregistrer dans la base de données
+                                renderProposerPage({...context, messageValide: resp.messageValide});
+
                             }
                             else {
-                                console.log("erreur");
-                                document.location.href = ''; //renvoyer à l'accueil
+                                renderProposerPage({...context, messageErreur: resp.messageErreur});
                             }
                         });
                 }

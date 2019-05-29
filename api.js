@@ -167,23 +167,210 @@ module.exports = (passport) => {
     });
 
     // Point d'entrée pour la recherche de trajet
-    app.post('/search-trajet', function (req, res, next) {
-        if (!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.date_depart || !req.body.heure_depart)
+    // TODO: Faire en sorte que la recherche ne se fasse pas que sur la ville précise
+    app.get('/search-trajet/:lieu_depart/:lieu_arrivee/:heure_depart', function (req, res, next) {
+        if (!req.params.lieu_depart || !req.params.lieu_arrivee || !req.params.heure_depart)
             return res.send({success: false, message: 'Informations manquantes'});
 
-        return res.send({success: true});
+        let villeDep = req.params.lieu_depart;
+        let villeArr = req.params.lieu_arrivee;
+        let heureDep = req.params.heure_depart;
+
+        // Get ID ville départ
+        dbHelper.lieu.byVille(villeDep)
+            .then(responseDep => {
+                let id_lieu_depart = responseDep.Id_lieu;
+
+                // Get ID ville arrivée
+                dbHelper.lieu.byVille(villeArr)
+                    .then(responseArr => {
+                        let id_lieu_arrivee = responseArr.Id_lieu;
+
+                        // Get ID conducteur, Prix, Heure_Arrivee
+                        dbHelper.trajets.byLieuDepArrHeure(id_lieu_depart, id_lieu_arrivee, heureDep)
+                            .then((response) => {
+
+                                let promises = [];
+
+                                // Get tous les conducteurs des trajets
+                                response.forEach(function (trajet){
+                                    let conducteur = [trajet.Id_trajet];
+
+                                    promises.push(
+                                        new Promise(resolve => {
+
+                                            // Get conducteur
+                                            dbHelper.users.byIdGetName(trajet.Id_conducteur)
+                                                .then(function(res) {
+                                                    res.Id_conducteur = trajet.Id_conducteur;
+                                                    conducteur.push(res);
+                                                    resolve(conducteur);
+                                                });
+                                        })
+                                    );
+                                });
+
+                                Promise.all(promises)
+                                    .then((conducteurs) => {
+
+                                        let mapTrajetConducteur = new Map(conducteurs);
+
+                                        let trajets = [];
+
+                                        response.forEach(function (trajet_bd) {
+                                            let heureDepText = heureIntToText(trajet_bd.Heure);
+                                            let heureArrText = heureIntToText(trajet_bd.Heure_Arrivee);
+
+                                            let trajet = {
+                                                prix: trajet_bd.Prix,
+                                                nbPlaces: trajet_bd.Nb_places,
+                                                conducteur: {
+                                                    nom: mapTrajetConducteur.get(trajet_bd.Id_trajet).Nom,
+                                                    prenom: mapTrajetConducteur.get(trajet_bd.Id_trajet).Prenom,
+                                                    //vehicule: mapTrajetConducteur.get(trajet_bd.Id_trajet).Id_vehicule
+                                                    //id: mapTrajetConducteur.get(trajet_bd.Id_trajet).id
+                                                },
+                                                depart: {
+                                                    lieu:villeDep,
+                                                    heure:heureDepText
+                                                },
+                                                arrivee: {
+                                                    lieu:villeArr,
+                                                    heure:heureArrText
+                                                },
+                                            };
+                                            trajets.push(trajet);
+
+                                        });
+
+                                        // On renvoit le json contenant les trajets à afficher sur liste-trajets
+                                        if(trajets.length > 0) {
+                                            return res.send({
+                                                success: true,
+                                                trajets: trajets
+                                            });
+                                        } else {
+                                            return res.send({
+                                                success: false,
+                                                message: 'Aucun trajet disponible'
+                                            });
+                                        }
+                                    });
+                            })
+                            .catch(function () {
+                                return res.send({
+                                    success: false,
+                                    message: 'Pas de trajet disponible'
+                                });
+                            });
+                    })
+                    .catch(function () {
+                        return res.send({
+                            success: false,
+                            message: 'Lieu arrivée inexistant'
+                        });
+                    });
+            })
+            .catch(function () {
+                return res.send({
+                    success: false,
+                    message: 'Lieu départ inexistant\n'
+                });
+            });
     });
 
-    // @TODO: liste-trajets
 
-
-    //Point d'entrée pour la recherche de trajet
+    //Point d'entrée pour l'ajout de trajet
     app.post('/propose-trajet', function(req, res, next){
-        if(!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.date_depart || !req.body.heure_depart || !req.body.modele_voiture || !req.body.nbPassagers)
+        if(!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.prix || !req.body.heure_depart || !req.body.nbPlaces)
             return res.send({success: false, message: 'Informations manquantes'});
-        return res.send({success: true});
+        
+        let idConducteur = req.session.passport.user;        //Récupérer l'id conducteur
+ 
+        let promises = [];
+
+        promises.push(
+            new Promise(resolve => {
+                dbHelper.lieu.byVille(req.body.lieu_depart)
+                .then( idLieuDep => {
+                    if(typeof idLieuDep === "undefined"){
+                        //inserer en bdd si inexistant
+                        dbHelper.lieu.create(req.body.lieu_depart)
+                        .then(()=>{
+                            dbHelper.lieu.byVille(req.body.lieu_depart)
+                            .then(idLieuDep=>{
+                                resolve(idLieuDep);
+                            });
+                        });
+                    }else{
+                        resolve(idLieuDep);
+                    }
+                }).catch(function(error){
+                    return res.send({success: false, messageErreur: 'Erreur Base de données '+ error});
+                });
+            })
+        );
+
+        promises.push(
+            new Promise(resolve => {
+                dbHelper.lieu.byVille(req.body.lieu_arrivee)
+                .then(idLieuArr =>{
+                    if(typeof idLieuArr === "undefined"){
+                        //inserer en bdd si inexistant
+                        dbHelper.lieu.create(req.body.lieu_arrivee)
+                        .then(()=>{
+                            dbHelper.lieu.byVille(req.body.lieu_arrivee)
+                            .then(idLieuArr=>{
+                                resolve(idLieuArr);
+                            });
+                        });            
+                    }else{
+                        resolve(idLieuArr);
+                    }
+                }).catch(function(error){
+                    return res.send({success: false, messageErreur: 'Erreur Base de données '+ error});
+                });
+            })
+        );
+
+
+        Promise.all(promises)
+        .then((ids) => {
+            let idLieuDep = ids[0].Id_lieu;
+            let idLieuArr = ids[1].Id_lieu;
+             
+            dbHelper.trajets.create(0, null, null, 0, req.body.prix, 0, '', req.body.heure_depart, 0,
+            idLieuDep, idLieuArr, idConducteur, req.body.nbPlaces)
+            .then(
+                result => {
+                    res.send({success: true, messageValide: 'Votre trajet a bien été ajouté'});                  
+                },
+                err => {
+                    res.send({success: false, messageErreur: 'bad request'});
+                    next(err);
+                },
+            ).catch(function(error){
+                return res.send({succes: false, messageErreur: 'BDD error ' +error});
+            });
+        });
+
     });
     
     return app;
 
 };
+
+function heureIntToText(heureInt) {
+    let heureString = heureInt.toString();
+    let heureText = '';
+    if(heureString.length === 1) {
+        heureText = '00:0' + heureString;
+    } else if (heureString.length === 2) {
+        heureText = '00:' + heureString;
+    } else if (heureString.length === 3) {
+        heureText = '0' + heureString[0] + ':' + heureString[1] + heureString[2];
+    } else if (heureString.length === 4) {
+        heureText = heureString[0] + heureString[1]  + ':' + heureString[2] + heureString[3];
+    }
+    return heureText;
+}
