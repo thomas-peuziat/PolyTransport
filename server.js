@@ -38,8 +38,12 @@ app.use(function (req, res) {
         "<a href='/trajet/accueil'>Retour à l'accueil</a>");
 });
 
+let port = 'PORT' in process.env ? process.env.PORT: 8080;
+
 // Lancement du serveur web
-const server = app.listen(8080, function () {
+const server = app.listen(port, function () {
     let port = server.address().port;
-    console.log('My app is listening at http://127.0.0.1:%s', port);
+    let host = server.address().address;
+
+    console.log('My app is listening at http://%s:%s', host, port);
 });
