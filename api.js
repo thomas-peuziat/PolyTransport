@@ -2,7 +2,7 @@
 'use strict';
 
 // Ce module nodejs gère l'API de notre site
-// Il définit l'ensemble des routes (relative à "/api") corresponant aux
+// Il définit l'ensemble des routes (relative à '/api') corresponant aux
 // points d'entrée de l'API
 
 // Expressjs
@@ -11,8 +11,8 @@ const express = require('express');
 const dbHelper = require('./dbhelper.js');
 
 // Comme c'est un module nodejs il faut exporter les fonction qu'on veut rendre publiques
-// ici on n'exporte qu'ne seule fonction (anonyme) qui est le "constructeur" du module
-// Cette fonction prend en paramètre un objet "passport" pour la gestion de l'authentification
+// ici on n'exporte qu'ne seule fonction (anonyme) qui est le 'constructeur' du module
+// Cette fonction prend en paramètre un objet 'passport' pour la gestion de l'authentification
 module.exports = (passport) => {
     const app = express();
 
@@ -64,6 +64,106 @@ module.exports = (passport) => {
                 next(err);
             },
         );
+    });
+
+    app.get('/profil/:id_usr', function (req, res, next) {
+        dbHelper.users.vehiculeById(req.params.id_usr).then(
+            id_vehicule => {
+                console.log(id_vehicule);
+                if(id_vehicule.Id_vehicule !== null) {
+                    console.log('bite');
+                    dbHelper.users.infosById(req.params.id_usr, id_vehicule.Id_vehicule).then(
+                        infos => {
+                            console.log(infos);
+                            res.set('Content-type', 'application/json');
+                            res.send(JSON.stringify(infos));
+                        },
+                        err => {
+                            next(err);
+                        },
+                    );
+                }else {
+                    dbHelper.users.infosByIdSansV(req.params.id_usr).then(
+                        infos => {
+                            console.log(infos);
+                            res.set('Content-type', 'application/json');
+                            res.send(JSON.stringify(infos));
+                        },
+                        err => {
+                            next(err);
+                        },
+                    );
+                }
+
+            },
+            err => {
+                next(err);
+            },
+        );
+
+
+    });
+
+    app.put('/profil/:id_usr', function (req, res, next) {
+        // if (!req.body.nom || !req.body.prenom || !req.body.email || !req.body.phone || !req.body.DDN)
+        //     return res.send({success: false, message: 'Informations manquantes'});
+        if (req.body.marque) {
+            dbHelper.vehicule.search(req.body.marque, req.body.modele, req.body.annee).then(result => {
+                let data = JSON.stringify(result);
+                console.log(data);
+                if (typeof data === 'undefined') {
+                    dbHelper.vehicule.create(req.body.marque, req.body.modele, req.body.annee).then(result => {
+                        dbHelper.vehicule.search(req.body.marque, req.body.modele, req.body.annee).then(result => {
+                            console.log(result);
+                            dbHelper.users.update(req.params.id_usr, req.body.nom, req.body.prenom, req.body.email, req.body.phone, req.body.DDN, result.Id_vehicule).then(
+                                result => {
+                                    res.send({success: true, message: 'Mise à jour de votre profil'});
+                                },
+                                err => {
+                                    res.send({success: false, message: 'bad request'});
+                                    next(err);
+                                },
+                            ).catch(function(error){
+                                return res.send({success: false, message: 'Erreur Base de données '+ error});
+                            });
+            
+                        }).catch(function(error){
+                            return res.send({success: false, message: 'Erreur Base de données '+ error});
+                        });
+        
+                    }).catch(function(error){
+                        return res.send({success: false, message: 'Erreur Base de données '+ error});
+                    });
+    
+                } else {
+                    dbHelper.users.update(req.params.id_usr, req.body.nom, req.body.prenom, req.body.email, req.body.phone, req.body.DDN, result.Id_vehicule).then(
+                        result => {
+                            res.send({success: true, message: 'Mise à jour de votre profil'});
+                        },
+                        err => {
+                            res.send({success: false, message: 'bad request'});
+                            next(err);
+                        },
+                    ).catch(function(error){
+                        return res.send({success: false, message: 'Erreur Base de données '+ error});
+                    });
+    
+                }
+            });
+        } else {
+            dbHelper.users.updateSansV(req.params.id_usr, req.body.nom, req.body.prenom, req.body.email, req.body.phone, req.body.DDN).then(
+                result => {
+                    res.send({success: true, message: 'Mise à jour de votre profil'});
+                },
+                err => {
+                    res.send({success: false, message: 'bad request'});
+                    next(err);
+                },
+            ).catch(function(error){
+                return res.send({success: false, message: 'Erreur Base de données '+ error});
+            });
+        }
+        
     });
 
     // Point d'entrée pour la recherche de trajet
@@ -122,13 +222,14 @@ module.exports = (passport) => {
                                             let heureArrText = heureIntToText(trajet_bd.Heure_Arrivee);
 
                                             let trajet = {
+                                                id: trajet_bd.Id_trajet,
                                                 prix: trajet_bd.Prix,
                                                 nbPlaces: trajet_bd.Nb_places,
                                                 conducteur: {
                                                     nom: mapTrajetConducteur.get(trajet_bd.Id_trajet).Nom,
                                                     prenom: mapTrajetConducteur.get(trajet_bd.Id_trajet).Prenom,
                                                     //vehicule: mapTrajetConducteur.get(trajet_bd.Id_trajet).Id_vehicule
-                                                    //id: mapTrajetConducteur.get(trajet_bd.Id_trajet).id
+                                                    id: mapTrajetConducteur.get(trajet_bd.Id_trajet).Id_conducteur
                                                 },
                                                 depart: {
                                                     lieu:villeDep,
