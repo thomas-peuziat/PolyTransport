@@ -89,6 +89,8 @@ module.exports.trajets = {
     //ATTENTION : vérifier que les id lieux et id_conducteur existent
     create: (etat, note, commentaire, km, prix, etatPaiement, idPaypalPaiement, heureDep, heureArr, idLieuDep, idLieuArr, idConducteur, nbPlace) => run(`INSERT INTO TRAJET (Etat, Note, Commentaire, Kilometres, Prix, Etat_payement, Id_paypal_paiement, Heure, Heure_Arrivee, Id_lieu_depart, Id_lieu_arrivee, Id_conducteur, Nb_places)
     VALUES (${etat}, ${note}, '${commentaire}', ${km}, ${prix}, ${etatPaiement}, '${idPaypalPaiement}', ${heureDep}, '${heureArr}', ${idLieuDep}, ${idLieuArr}, ${idConducteur}, ${nbPlace});`),
+    byIdGetNbPlaces: idTrajet =>get(`select Nb_places from TRAJET where Id_trajet=${idTrajet}`),
+    updateNbPlaces: (idTrajet, nbPlace) => run(`update TRAJET set Nb_places=${nbPlace} where Id_trajet=${idTrajet}`),
 };
 
 module.exports.lieu = {
@@ -102,3 +104,8 @@ module.exports.vehicule = {
     create: (marque, modele, annee) => run(`insert into VEHICULE (Marque, Modele, Annee) values ('${marque}', '${modele}', ${annee} )`),
     byId: id => get(`select Marque, Modele, Annee, Image from VEHICULE where Id_vehicule = ${id}`),
 };
+
+module.exports.passager = {
+    create: (idUsr, idTrajet) => run(`insert into passager (Id_usr, Id_trajet) values (${idUsr}, ${idTrajet})`),
+    byIds: (idUsr, idTrajet) => get(`select Id_usr from PASSAGER where Id_trajet =${idTrajet} and Id_usr=${idUsr}`),
+}

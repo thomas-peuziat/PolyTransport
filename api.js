@@ -275,6 +275,50 @@ module.exports = (passport) => {
 
     });
 
+    app.post('/trajet/reserver', function(req, res, next){
+        let idTrajet = req.body.id_trajet;
+        //on récupère le nombre de places disponibles
+        dbHelper.trajets.byIdGetNbPlaces(idTrajet)
+        .then(resultat => {
+            if(resultat.Nb_places > 0){
+                dbHelper.passager.byIds(req.session.passport.user, idTrajet)
+                .then(resReq => {
+                    //si l'user a déjà reservé pour ce trajet
+                    if(typeof resReq !== "undefined" && resReq.Id_usr === req.session.passport.user){
+                        return res.send({success: false, messageErreur: 'Vous avez déjà réservé pour ce trajet'});
+                    }
+                    else{
+                        //MAJ du nombre de places disponible
+                        dbHelper.trajets.updateNbPlaces(idTrajet, resultat.Nb_places-1)
+                        .then(()=>{
+                            //on créé un nouveau passager
+                            dbHelper.passager.create(req.session.passport.user, idTrajet)
+                            .then(()=>{
+                                return res.send({success: true, messageValide: 'Réservation effectuée'});
+                            })
+                            .catch(function(error){
+                                return res.send({success: false, messageErreur: 'Erreur1 Base de données '+ error});
+                            });
+                        })
+                        .catch(function(error){
+                            return res.send({success: false, messageErreur: 'Erreur2 Base de données '+ error});
+                        });
+                    }
+                }).catch(function(error){
+                    return res.send({success: false, messageErreur: 'Erreur3 Base de données '+ error});
+                });
+
+            }
+            else{
+                return res.send({success: false, messageErreur: 'Aucune place de libre'});
+
+            }
+        }).catch(function(error){
+            return res.send({success: false, messageErreur: 'Erreur4 Base de données '+ error});
+        });
+
+    });
+
     // Point d'entrée pour la recherche de trajet
     // TODO: Faire en sorte que la recherche ne se fasse pas que sur la ville précise
     app.get('/search-trajet/:lieu_depart/:lieu_arrivee/:heure_depart', function (req, res, next) {
