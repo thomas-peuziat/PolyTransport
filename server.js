@@ -29,7 +29,7 @@ app.use('/', indexRouter);
 app.use('/connexion', connexionRouter);
 app.use('/inscription', inscriptionRouter);
 app.use('/trajet', require('connect-ensure-login').ensureLoggedIn('/connexion'), trajetRouter);
-app.use('/profil', require('connect-ensure-login').ensureLoggedIn('/connexion'), profilRouter)
+app.use('/profil', require('connect-ensure-login').ensureLoggedIn('/connexion'), profilRouter);
 //app.use('/proposertrajet', proposerRouter); //added
 
 // Erreur 404
