@@ -14,11 +14,8 @@ const indexRouter = require('./routes/indexroute');
 const connexionRouter = require('./routes/connexionroute');
 const inscriptionRouter = require('./routes/inscriptionroute');
 const trajetRouter = require('./routes/trajetroute');
-<<<<<<< HEAD
 const profilRouter = require('./routes/profilroute');
 //const proposerRouter = require('./routes/proposerroute'); //added
-=======
->>>>>>> 381e2733d32c0522a4c10edc7384dc074fb4b488
 // on met en place une authentification valide pour toute le site
 const passport = auth(app);
 
