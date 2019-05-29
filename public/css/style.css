@@ -82,6 +82,6 @@ a.lien:visited{
     padding-bottom: 20vw;
 }
 
-#vehicule_details {
-    display : none;
+#vehicule_details input{
+    float: right;
 }

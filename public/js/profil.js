@@ -23,10 +23,20 @@ async function renderProfilPage(context) {
     await renderTemplate(templates('/public/views/profil/profil.html'), context);
     const submit_btn = document.querySelector('.btn');
 
-    const input_vehicule = document.querySelector('#inputVoiture');
-    input_vehicule.addEventListener('focus', function () {
-        document.querySelector('#vehicule_details').style.display = 'block';
+    const input_marque = document.querySelector('#inputMarque');
+    input_marque.addEventListener('change', function () {
+        const input_modele = document.querySelector('#inputModele');
+        document.querySelector('#inputVoiture').value = input_marque.value + ' ~ ' + input_modele.value;
     });
+
+    const input_modele = document.querySelector('#inputModele');
+    input_modele.addEventListener('change', function () {
+        const input_marque = document.querySelector('#inputMarque');
+        document.querySelector('#inputVoiture').value = input_marque.value + ' ~ ' + input_modele.value;
+    });
+
+    const input_voiture = document.querySelector('#inputVoiture');
+    input_voiture.value = input_marque.value + ' ~ ' + input_modele.value;
 
     submit_btn.addEventListener('click', function () {
         const nom = document.querySelector('#inputNameM').value;
@@ -34,6 +44,10 @@ async function renderProfilPage(context) {
         const email = document.querySelector('#inputEmailM').value;
         const phone = document.querySelector('#inputPhoneM').value;
         const DDN = document.querySelector('#inputDdnM').value;
+        const marque = document.querySelector('#inputMarque').value;
+        const modele = document.querySelector('#inputModele').value;
+        const annee = document.querySelector('#inputAnnee').value;
+
         // @TODO : Vehicule
 
         fetch('/api/profil/' + id_usr, {
@@ -43,7 +57,7 @@ async function renderProfilPage(context) {
             },
             method: 'PUT',
             body: 'nom=' + nom + '&prenom=' + prenom + '&email=' + email + '&phone=' + phone
-            + '&DDN=' + DDN,
+            + '&DDN=' + DDN + '&marque=' + marque + '&modele=' + modele + '&annee=' + annee,
         })
         .then(function (response) {
             if (response.ok) {
