@@ -21,7 +21,7 @@ CREATE TABLE VEHICULE(
 	Marque         TEXT NOT NULL ,
 	Modele         TEXT NOT NULL ,
 	Annee          NUMERIC NOT NULL ,
-	Image          BLOB NOT NULL
+	Image          BLOB
 );
 
 

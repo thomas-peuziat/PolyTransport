@@ -69,7 +69,7 @@ module.exports = (passport) => {
     app.get('/profil/:id_usr', function (req, res, next) {
         dbHelper.users.vehiculeById(req.params.id_usr).then(
             id_vehicule => {
-                if(id_vehicule) {
+                if(id_vehicule.Id_vehicule !== null) {
                     dbHelper.users.infosById(req.params.id_usr, id_vehicule.Id_vehicule).then(
                         infos => {
                             res.set('Content-type', 'application/json');
