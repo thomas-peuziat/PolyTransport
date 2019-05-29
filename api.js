@@ -70,7 +70,7 @@ module.exports = (passport) => {
         dbHelper.users.vehiculeById(req.params.id_usr).then(
             id_vehicule => {
                 console.log(id_vehicule);
-                if(id_vehicule) {
+                if(id_vehicule.Id_vehicule !== null) {
                     console.log('bite');
                     dbHelper.users.infosById(req.params.id_usr, id_vehicule.Id_vehicule).then(
                         infos => {
