@@ -33,11 +33,8 @@ app.use('/', indexRouter);
 app.use('/connexion', connexionRouter);
 app.use('/inscription', inscriptionRouter);
 app.use('/trajet', trajetRouter);
-<<<<<<< HEAD
 app.use('/profil', require('connect-ensure-login').ensureLoggedIn('/connexion'), profilRouter)
 //app.use('/proposertrajet', proposerRouter); //added
-=======
->>>>>>> 381e2733d32c0522a4c10edc7384dc074fb4b488
 
 // Erreur 404
 app.use(function (req, res) {
