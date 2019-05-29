@@ -33,11 +33,10 @@ async function renderDetailTrajetPage(context) {
                     .then((resp) => {
                         if (resp.success) {
                             context.trajet = resp.trajet;
-                            console.log(context.trajet);
-                            renderTemplate(templates('/public/views/trajet/details-trajet.html'), context);
+                            renderTemplate(templates('/public/views/trajet/details-trajet.mustache'), context);
                         } else {
                             context.message = resp.message;
-                            renderTemplate(templates('/public/views/trajet/details-trajet.html'), context);
+                            renderTemplate(templates('/public/views/trajet/details-trajet.mustache'), context);
                         }
                     });
             }

@@ -6,7 +6,7 @@ let context = {};
 renderSignupPage(context);
 
 async function renderSignupPage(context) {
-    await renderTemplate(templates('/public/views/signup.html'), {});
+    await renderTemplate(templates('/public/views/signup.mustache'), {});
     
     const submit_btn = document.querySelector('.btn');
 
@@ -29,7 +29,6 @@ async function renderSignupPage(context) {
             + '&photo=' + photo + '&password=' + password + '&passwordVerif=' + passwordVerif,
         })
         .then(function (response) {
-            console.log(response)
             if (response.ok) {
                 response.json()
                 .then((resp) => {

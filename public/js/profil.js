@@ -19,8 +19,7 @@ async function getInfoUser(idUsr, context) {
 }
 
 async function renderProfilPage(context) {
-    console.log(context);
-    await renderTemplate(templates('/public/views/profil/profil.html'), context);
+    await renderTemplate(templates('/public/views/profil/profil.mustache'), context);
     const submit_btn = document.querySelector('.btn');
 
     const input_marque = document.querySelector('#inputMarque');

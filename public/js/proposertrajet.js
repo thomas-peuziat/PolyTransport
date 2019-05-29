@@ -6,7 +6,7 @@ let context = {};
 renderProposerPage(context);
 
 async function renderProposerPage(context) {
-    await renderTemplate(templates('/public/views/trajet/proposer-trajet.html'), context);
+    await renderTemplate(templates('/public/views/trajet/proposer-trajet.mustache'), context);
 
     const proposer = document.querySelector('#proposer-btn');
     proposer.addEventListener('click', function () {

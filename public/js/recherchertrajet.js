@@ -6,7 +6,7 @@ let context = {};
 renderRechercherPage(context);
 
 async function renderRechercherPage(context) {
-    await renderTemplate(templates('/public/views/trajet/rechercher-trajet.html'), context);
+    await renderTemplate(templates('/public/views/trajet/rechercher-trajet.mustache'), context);
 
     const search = document.querySelector('#search-btn');
 

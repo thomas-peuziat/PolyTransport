@@ -10,8 +10,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:id_usr', function(req, res, next) {
-    console.log(req.params.id_usr);
-    console.log(req.session.passport.user);
     if (req.params.id_usr == req.session.passport.user) {
         res.sendFile('profil.html',  {'root': 'public/views/profil'});
     }

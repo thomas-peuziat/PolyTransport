@@ -31,10 +31,10 @@ async function renderListeTrajetsPage(context) {
                     .then((resp) => {
                         if (resp.success) {
                             context.trajets = resp.trajets;
-                            renderTemplate(templates('/public/views/trajet/liste-trajets.html'), context);
+                            renderTemplate(templates('/public/views/trajet/liste-trajets.mustache'), context);
                         } else {
                             context.message = resp.message;
-                            renderTemplate(templates('/public/views/trajet/liste-trajets.html'), context);
+                            renderTemplate(templates('/public/views/trajet/liste-trajets.mustache'), context);
                         }
                     });
             }

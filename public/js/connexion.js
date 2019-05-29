@@ -6,7 +6,7 @@ let context = {};
 renderLoginPage(context);
 
 async function renderLoginPage(context) {
-    await renderTemplate(templates('/public/views/login.html'), context);
+    await renderTemplate(templates('/public/views/login.mustache'), context);
     
     const submit_btn = document.querySelector('#login-btn');
 
@@ -32,11 +32,7 @@ async function renderLoginPage(context) {
                         renderLoginPage({...context, message: resp.message});
                     }
                 });
-                //console.log(response);
-        
-                
             }
-    
         });
     });
 }
