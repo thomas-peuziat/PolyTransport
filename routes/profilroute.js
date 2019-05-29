@@ -6,7 +6,7 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-    res.redirect('/profil/' + req.session.passport.user);
+    res.redirect('/3D/profil/' + req.session.passport.user);
 });
 
 router.get('/:id_usr', function(req, res, next) {
@@ -15,7 +15,7 @@ router.get('/:id_usr', function(req, res, next) {
     }
     else {
         req.logOut();
-        res.redirect('/connexion');
+        res.redirect('/3D/connexion');
     }
 });
 

@@ -20,7 +20,7 @@ async function renderDetailTrajetPage(context) {
         message:''
     };
 
-    fetch('/api/trajet/' + id_trajet, {
+    fetch('/3D/api/trajet/' + id_trajet, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -33,10 +33,10 @@ async function renderDetailTrajetPage(context) {
                     .then((resp) => {
                         if (resp.success) {
                             context.trajet = resp.trajet;
-                            renderTemplate(templates('/public/views/trajet/details-trajet.mustache'), context);
+                            renderTemplate(templates('/3D/public/views/trajet/details-trajet.mustache'), context);
                         } else {
                             context.message = resp.message;
-                            renderTemplate(templates('/public/views/trajet/details-trajet.mustache'), context);
+                            renderTemplate(templates('/3D/public/views/trajet/details-trajet.mustache'), context);
                         }
                     });
             }

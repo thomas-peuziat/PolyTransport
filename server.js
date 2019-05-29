@@ -19,23 +19,23 @@ const profilRouter = require('./routes/profilroute');
 const passport = auth(app);
 
 // l'api d'accès aux données sera disponible sous la route "/api"
-app.use('/api', api(passport));
+app.use('/3D/api', api(passport));
 
 // Le contenu statique public sera lu à partir du repertoire 'public'
-app.use('/public', express.static('public'));
+app.use('/3D/public', express.static('public'));
 
 
-app.use('/', indexRouter);
-app.use('/connexion', connexionRouter);
-app.use('/inscription', inscriptionRouter);
-app.use('/trajet', require('connect-ensure-login').ensureLoggedIn('/connexion'), trajetRouter);
-app.use('/profil', require('connect-ensure-login').ensureLoggedIn('/connexion'), profilRouter);
+app.use('/3D/', indexRouter);
+app.use('/3D/connexion', connexionRouter);
+app.use('/3D/inscription', inscriptionRouter);
+app.use('/3D/trajet', require('connect-ensure-login').ensureLoggedIn('/3D/connexion'), trajetRouter);
+app.use('/3D/profil', require('connect-ensure-login').ensureLoggedIn('/3D/connexion'), profilRouter);
 //app.use('/proposertrajet', proposerRouter); //added
 
 // Erreur 404
 app.use(function (req, res) {
     res.status(404).send("<h1>Erreur 404: Route inexistante</h1>" +
-        "<a href='/trajet/accueil'>Retour à l'accueil</a>");
+        "<a href='/3D/trajet/accueil'>Retour à l'accueil</a>");
 });
 
 let port = 'PORT' in process.env ? process.env.PORT: 8080;
@@ -45,5 +45,5 @@ const server = app.listen(port, function () {
     let port = server.address().port;
     let host = server.address().address;
 
-    console.log('My app is listening at http://%s:%s', host, port);
+    console.log('My app is listening at http://%s:%s/3D/', host, port);
 });

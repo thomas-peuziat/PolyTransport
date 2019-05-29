@@ -7,7 +7,7 @@ const id_usr = document.location.href.split('/').pop();
 getInfoUser(id_usr, context);
 
 async function getInfoUser(idUsr, context) {
-    const response = await fetch('/api/profil/' + idUsr);
+    const response = await fetch('/3D/api/profil/' + idUsr);
     if (context.message) {
         let msg = context.message;
         context = await response.json();
@@ -19,7 +19,7 @@ async function getInfoUser(idUsr, context) {
 }
 
 async function renderProfilPage(context) {
-    await renderTemplate(templates('/public/views/profil/profil.mustache'), context);
+    await renderTemplate(templates('/3D/public/views/profil/profil.mustache'), context);
     const submit_btn = document.querySelector('.btn');
 
     const input_marque = document.querySelector('#inputMarque');
@@ -49,7 +49,7 @@ async function renderProfilPage(context) {
 
         // @TODO : Vehicule
 
-        fetch('/api/profil/' + id_usr, {
+        fetch('/3D/api/profil/' + id_usr, {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',

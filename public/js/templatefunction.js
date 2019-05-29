@@ -22,8 +22,8 @@ const loadPartials = (() => {
     return async function loadPartials() {
         if (!partials) {
             partials = {
-                navbar: templates('/public/partials/navbar.mustache'),
-                topbar: templates('/public/partials/topbar.mustache'), 
+                navbar: templates('/3D/public/partials/navbar.mustache'),
+                topbar: templates('/3D/public/partials/topbar.mustache'),
             };
             const promises = Object.entries(partials)
                 .map(async function ([k, v]) {

@@ -18,7 +18,7 @@ async function renderListeTrajetsPage(context) {
         message:''
     };
 
-    fetch('/api/search-trajet/' + lieu_depart + '/' + lieu_arrivee + '/' + heure_depart, {
+    fetch('/3D/api/search-trajet/' + lieu_depart + '/' + lieu_arrivee + '/' + heure_depart, {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -31,10 +31,10 @@ async function renderListeTrajetsPage(context) {
                     .then((resp) => {
                         if (resp.success) {
                             context.trajets = resp.trajets;
-                            renderTemplate(templates('/public/views/trajet/liste-trajets.mustache'), context);
+                            renderTemplate(templates('/3D/public/views/trajet/liste-trajets.mustache'), context);
                         } else {
                             context.message = resp.message;
-                            renderTemplate(templates('/public/views/trajet/liste-trajets.mustache'), context);
+                            renderTemplate(templates('/3D/public/views/trajet/liste-trajets.mustache'), context);
                         }
                     });
             }
