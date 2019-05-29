@@ -17,4 +17,8 @@ router.get('/liste-trajets', function(req, res, next) {
     res.sendFile('liste-trajets.html',  {'root': 'public/views/trajet'});
 });
 
+router.get('/', function(req, res, next) {
+    res.sendFile('details-trajet.html',  {'root': 'public/views/trajet'});
+});
+
 module.exports = router;

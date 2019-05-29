@@ -19,7 +19,7 @@ const db = new sqlite3.Database('./PolyTransport.db', sqlite3.OPEN_READWRITE, fu
 // Rend la fonction get de l'api sqlite compatible avec les promesses
 const get = sql => new Promise(function (resolve, reject) {
     db.get(sql, function (err, row) {
-        console.log(sql);
+        //console.log(sql);
         if (err) {
             reject(err);
         }
@@ -31,7 +31,7 @@ const get = sql => new Promise(function (resolve, reject) {
 
 const run = sql => new Promise(function (resolve, reject) {
     db.run(sql, function (err, row) {
-        console.log(sql);
+        //console.log(sql);
         if (err) {
             reject(err);
         }
@@ -43,7 +43,7 @@ const run = sql => new Promise(function (resolve, reject) {
 
 // Idem pour la fonction all
 const all = sql => new Promise(function (resolve, reject) {
-    console.log(sql);
+    //console.log(sql);
     db.all(sql, function (err, rows) {
         if (err) {
             reject(err);
@@ -78,7 +78,8 @@ module.exports.users = {
 };
 
 module.exports.trajets = {
-    byId: id => get(`select Mail as username from UTILISATEUR where Id_usr = ${id}`),
+    byId: id => get(`select Kilometres, Prix, Id_paypal_paiement, Heure, Heure_Arrivee, Id_lieu_depart, Id_lieu_arrivee, Id_conducteur, Nb_Places from TRAJET 
+            where Id_trajet = ${id}`),
     //ATTENTION - verifier pour Heure > ...
     byLieuDepArrHeure: (lieuDep, lieuArr, heure) =>
         all(`select Id_conducteur, Prix, Heure, Heure_Arrivee, Nb_places, Id_trajet from TRAJET 
@@ -99,5 +100,5 @@ module.exports.lieu = {
 module.exports.vehicule = {
     search: (marque, modele, annee) => get(`select Id_vehicule from VEHICULE where Marque = '${marque}' and  Modele = '${modele}' and Annee = ${annee} `),
     create: (marque, modele, annee) => run(`insert into VEHICULE (Marque, Modele, Annee) values ('${marque}', '${modele}', ${annee} )`),
-    byId: id => get(`select Marque, Modele, Annee from VEHICULE where Id_vehicule = ${id}`),
+    byId: id => get(`select Marque, Modele, Annee, Image from VEHICULE where Id_vehicule = ${id}`),
 };
