@@ -58,7 +58,9 @@
                     <h4 class="container-fluid border-bottom font-weight-bold">Informations</h4>
                     <div class="m-3">
                         <span><label for="inputDdnM">Date de naissance</label><input class="col form-control" type="date"
-                                                                                    id="inputDdnM" value="{{DDN}}" ></span>
+                                                                                    id="inputDdnM" 
+                                                                                    max="2018-01-01"
+                                                                                    value="{{DDN}}" ></span>
                         <span><label for="inputPhoneM">Numéro de téléphone</label><input type="tel" id="inputPhoneM"
                                                                                         class="col form-control"
                                                                                         placeholder="N° de l'user"
@@ -76,7 +78,7 @@
                     <input type="text" id="inputVoiture" class="col form-control" placeholder="Clio 1 - FIDJI" disabled>
                     <input type="text" id="inputMarque" class="col form-control" placeholder="Marque" value="{{Marque}}" >
                     <input type="text" id="inputModele" class="col form-control" placeholder="Modèle" value="{{Modele}}" >
-                    <input type="text" id="inputAnnee" class="col form-control" placeholder="Année" value="{{Annee}}" >
+                    <input type="text" id="inputAnnee" class="col form-control" placeholder="Année" value="{{Annee}}" pattern="^19[0-9][0-9]$|^20[0|1][0-9]$" >
                 </div>
 
                 <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Valider modifications</button>
