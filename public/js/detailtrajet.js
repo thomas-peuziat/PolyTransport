@@ -30,15 +30,15 @@ async function renderDetailTrajetPage(context) {
                     .then((resp) => {
                         if (resp.success) {
                             context.trajet = resp.trajet;
-                            renderTemplate(templates('/3D/public/views/trajet/details-trajet.mustache'), context);
+                            return renderTemplate(templates('/3D/public/views/trajet/details-trajet.mustache'), context);
                         } else {
                             context.message = resp.message;
-                            renderTemplate(templates('/3D/public/views/trajet/details-trajet.mustache'), context);
+                            return  renderTemplate(templates('/3D/public/views/trajet/details-trajet.mustache'), context);
                         }
                     }).then(()=>{
                         const reserver = document.querySelector('#reservation');
                         reserver.addEventListener('click', function () {
-                            fetch('3D/api/trajet/reserver/', {
+                            fetch('/3D/api/trajet/reserver/', {
                                 headers: {
                                     'Accept': 'application/json',
                                     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -51,11 +51,11 @@ async function renderDetailTrajetPage(context) {
                                         response.json()
                                             .then((resp) => {
                                                 if (resp.success) {
-                                                    renderTemplate(templates('/public/views/trajet/details-trajet.html'), {...context, messageValide: resp.messageValide});
+                                                    renderTemplate(templates('/3D/public/views/trajet/details-trajet.mustache'), {...context, messageValide: resp.messageValide});
                     
                                                 }
                                                 else {
-                                                    renderTemplate(templates('/public/views/trajet/details-trajet.html'), {...context, messageErreur: resp.messageErreur});
+                                                    renderTemplate(templates('/3D/public/views/trajet/details-trajet.mustache'), {...context, messageErreur: resp.messageErreur});
                                                 }
                                             });
                                     }
