@@ -6,11 +6,11 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="icon" type="image/png" sizes="32x32" href="/public/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/public/img/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/3D/public/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/3D/public/img/favicon-16x16.png">
 
     <!-- Style sheet -->
-    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/3D/public/css/style.css">
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -28,58 +28,10 @@
     <!-- Mustache ! -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" async></script>
 
-    <script src="/public/js/proposertrajet.js" type="module" defer="defer"></script>
+    <script src="/3D/public/js/proposertrajet.js" type="module" defer="defer"></script>
 </head>
 <body class="bg-secondary">
 <div id="wrapper" class="w-100 bg-light">
-
-    {{>topbar}}
-
-    <a href="/public/views/trajet/accueil.html">
-        <button type="button" class="ml-3 mt-3 pl-4 pr-4 btn btn-primary go-back">
-            <img src="/public/img/vectorpaint.svg" alt="go_back">
-        </button>
-    </a>
-
-
-    {{#messageValide}}<div  class="alert alert-success">{{messageValide}}</div>{{/messageValide}}
-    {{#messageErreur}}<div  class="alert alert-danger">{{messageErreur}}</div>{{/messageErreur}}
-
-    <div id="creer-trajet" class="container w-75">
-        <form class="form-sign" onsubmit="return false;">
-            <div class="input-group">
-                <label for="inputDeparture" class="sr-only">Lieu départ</label>
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Départ</span>
-                </div>
-                <input type="text" id="inputDeparture" class="form-control" placeholder="Lieu départ" required autofocus>
-            </div>
-            <div class="input-group">
-                <label for="inputArrival" class="sr-only">Lieu arrivée</label>
-                <div class="input-group-prepend">
-                    <span class="input-group-text">Arrivée</span>
-                </div>
-                <input type="text" id="inputArrival" class="form-control" placeholder="Lieu arrivée" required>
-            </div>
-
-            <label for="inputDate" class="mt-3">Heure de départ</label>
-            <div class="input-group">
-                <input type="time" id="inputHour" class="form-control" required>
-            </div>
-
-            <label for="inputPassagers" class="mt-3">Nombre de places passagers</label>
-            <input type="number" id="inputPassagers" name="inputPassagers"
-                   min="1" max="10" class="form-control" value="1">
-
-            <label for="inputPrix" class="mt-3">Prix <img src="/public/img/baseline-euro_symbol-24px.svg" alt="€"></label>
-            <input type="number" id="inputPrix" name="inputPrix"
-                          min="1" class="form-control" value="1">
-
-            <button class="btn btn-lg btn-primary btn-block mt-5" id="proposer-btn" type="submit">Proposer</button>
-        </form>
-    </div>
-
-    {{>navbar}}
 
 </div>
 

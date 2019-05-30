@@ -19,7 +19,6 @@ const db = new sqlite3.Database('./PolyTransport.db', sqlite3.OPEN_READWRITE, fu
 // Rend la fonction get de l'api sqlite compatible avec les promesses
 const get = sql => new Promise(function (resolve, reject) {
     db.get(sql, function (err, row) {
-        //console.log(sql);
         if (err) {
             reject(err);
         }
@@ -31,7 +30,6 @@ const get = sql => new Promise(function (resolve, reject) {
 
 const run = sql => new Promise(function (resolve, reject) {
     db.run(sql, function (err, row) {
-        //console.log(sql);
         if (err) {
             reject(err);
         }
@@ -43,7 +41,6 @@ const run = sql => new Promise(function (resolve, reject) {
 
 // Idem pour la fonction all
 const all = sql => new Promise(function (resolve, reject) {
-    //console.log(sql);
     db.all(sql, function (err, rows) {
         if (err) {
             reject(err);

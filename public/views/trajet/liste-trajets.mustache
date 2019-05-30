@@ -1,0 +1,34 @@
+
+{{>topbar}}
+<a href="/3D/trajet/rechercher">
+    <button type="button" class="ml-3 mt-3 pl-4 pr-4 btn btn-primary go-back">
+        <img src="/3D/public/img/vectorpaint.svg" alt="go_back">
+    </button>
+</a>
+
+<div class="containerWrapper">
+    {{#message}}
+        <div class="alert alert-danger" role="alert" id="alert-error">
+            {{message}}
+        </div>
+    {{/message}}
+
+    {{#trajets}}
+        <div class="m-3">
+            <div class="card">
+                <div class="card-header">
+                    {{conducteur.prenom}} {{conducteur.nom}} - {{prix}} <img src="/3D/public/img/baseline-euro_symbol-24px.svg" alt="€">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{depart.lieu}} <img src="/3D/public/img/baseline-arrow_right_alt-24px.svg" alt="right arrow"> {{arrivee.lieu}}</h5>
+                    <p class="card-text">Heure départ : {{depart.heure}} / Heure arrivée : {{arrivee.heure}}</p>
+                    <p class="card-text">Nombre de places : {{nbPlaces}}</p>
+                    <a href="/3D/trajet/?id_trajet={{id}}" class="float-right">
+                    <button class="btn btn-success">Détails...</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    {{/trajets}}
+</div>
+{{>navbar}}
