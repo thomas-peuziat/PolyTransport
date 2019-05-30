@@ -32,26 +32,7 @@
 </head>
 <body class="bg-secondary">
 <div id="wrapper" class="w-100 bg-light">
-    {{>topbar}}
 
-    {{#messages}}
-        <div class="m-3">    
-            <a href="#" class="lien">
-                <div class="card">
-                    <h5 class="card-header">{{nom}} - {{Heure}}</h5>
-                    <div class="card-body">
-                        <span><img class="d-inline" src="/3D/public/img/baseline-mail_outline-24px.svg" alt="message">
-                        <p class="card-text d-inline">{{msg}}</p></span>
-                    </div>
-                </div>
-            </a>
-        </div>
-    {{/messages}}
-
-    {{#message}}<h1>{{message}}</h1>{{/message}}
-
-    
-    {{>navbar}}
 </div>
 
 </body>
