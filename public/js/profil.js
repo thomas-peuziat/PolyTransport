@@ -3,7 +3,7 @@
 import { renderTemplate, templates } from './templatefunction.js';
 
 let context = {};
-const id_usr = document.location.href.split('/').pop();
+const id_usr = document.location.href.split('/')[5];
 getInfoUser(id_usr, context);
 
 async function getInfoUser(idUsr, context) {
