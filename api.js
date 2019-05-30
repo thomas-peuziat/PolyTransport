@@ -17,7 +17,7 @@ module.exports = (passport) => {
     const app = express();
 
     // Point d'entrée pour la connexion
-    app.post('/connexion', function (req, res, next) {
+    app.post('/connexion/', function (req, res, next) {
         if (!req.body.username)
             return res.send({success: false, message: 'empty username'});
         if (!req.body.password)
