@@ -38,7 +38,7 @@ async function renderDetailTrajetPage(context) {
                     }).then(()=>{
                         const reserver = document.querySelector('#reservation');
                         reserver.addEventListener('click', function () {
-                            fetch('/api/trajet/reserver', {
+                            fetch('3D/api/trajet/reserver/', {
                                 headers: {
                                     'Accept': 'application/json',
                                     'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',

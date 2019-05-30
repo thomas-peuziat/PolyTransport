@@ -18,7 +18,7 @@ async function renderProposerPage(context) {
         const heure_depart = parseInt(heure_depart_non_parsed[0] + heure_depart_non_parsed[1] + heure_depart_non_parsed[3] + heure_depart_non_parsed[4]);
         const nbPlaces = document.querySelector("#inputPassagers").value;
 
-        fetch('/3D/api/propose-trajet', {
+        fetch('/3D/api/propose-trajet/', {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',

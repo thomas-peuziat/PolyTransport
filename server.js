@@ -20,17 +20,17 @@ const messagesRouter = require('./routes/messagesroute');
 const passport = auth(app);
 
 // l'api d'accès aux données sera disponible sous la route "/api"
-app.use('/3D/api', api(passport));
+app.use('/3D/api/', api(passport));
 
 // Le contenu statique public sera lu à partir du repertoire 'public'
-app.use('/3D/public', express.static('public'));
+app.use('/3D/public/', express.static('public'));
 
 
 app.use('/3D/', indexRouter);
-app.use('/3D/connexion', connexionRouter);
+app.use('/3D/connexion/', connexionRouter);
 app.use('/3D/inscription', inscriptionRouter);
-app.use('/3D/trajet', require('connect-ensure-login').ensureLoggedIn('/3D/connexion'), trajetRouter);
-app.use('/3D/profil', require('connect-ensure-login').ensureLoggedIn('/3D/connexion'), profilRouter);
+app.use('/3D/trajet/', require('connect-ensure-login').ensureLoggedIn('/3D/connexion/'), trajetRouter);
+app.use('/3D/profil/', require('connect-ensure-login').ensureLoggedIn('/3D/connexion/'), profilRouter);
 //app.use('/proposertrajet', proposerRouter); //added
 
 // Erreur 404

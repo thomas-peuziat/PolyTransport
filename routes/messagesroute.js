@@ -6,10 +6,10 @@ router.post('/', function(req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
-    res.redirect('/messages/liste-discussion');
+    res.redirect('/messages/liste-discussion/');
 });
 
-router.get('/liste-discussion', function(req, res, next) {
+router.get('/liste-discussion/', function(req, res, next) {
     res.sendFile('liste-discussions.html',  {'root': 'public/views/message'});
 });
 

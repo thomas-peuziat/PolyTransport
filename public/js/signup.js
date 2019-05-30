@@ -19,7 +19,7 @@ async function renderSignupPage(context) {
         const password = document.querySelector('#inputPasswordSU').value;
         const passwordVerif = document.querySelector('#inputPasswordVerifSU').value;
 
-        fetch('/3D/api/inscription', {
+        fetch('/3D/api/inscription/', {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',

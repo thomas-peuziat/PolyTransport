@@ -41,7 +41,7 @@ module.exports = (passport) => {
     });
 
 
-    app.post('/inscription', function (req, res, next) {
+    app.post('/inscription/', function (req, res, next) {
         if (!req.body.nom)
             return res.send({success: false, message: 'empty name'});
         if (!req.body.prenom)
@@ -66,7 +66,7 @@ module.exports = (passport) => {
         );
     });
 
-    app.get('/profil/:id_usr', function (req, res, next) {
+    app.get('/profil/:id_usr/', function (req, res, next) {
         dbHelper.users.vehiculeById(req.params.id_usr).then(
             id_vehicule => {
                 if(id_vehicule.Id_vehicule !== null) {
@@ -100,7 +100,7 @@ module.exports = (passport) => {
 
     });
 
-    app.put('/profil/:id_usr', function (req, res, next) {
+    app.put('/profil/:id_usr/', function (req, res, next) {
         // if (!req.body.nom || !req.body.prenom || !req.body.email || !req.body.phone || !req.body.DDN)
         //     return res.send({success: false, message: 'Informations manquantes'});
         if (req.body.marque) {
@@ -160,7 +160,7 @@ module.exports = (passport) => {
         
     });
 
-    app.get('/trajet/:id_trajet', function (req, res, next) {
+    app.get('/trajet/:id_trajet/', function (req, res, next) {
         if(!req.params.id_trajet)
             return res.send({success: false, message: 'Informations manquantes'});
 
@@ -275,7 +275,7 @@ module.exports = (passport) => {
 
     });
 
-    app.post('/trajet/reserver', function(req, res, next){
+    app.post('/trajet/reserver/', function(req, res, next){
         let idTrajet = req.body.id_trajet;
         //on récupère le nombre de places disponibles
         dbHelper.trajets.byIdGetNbPlaces(idTrajet)
@@ -321,7 +321,7 @@ module.exports = (passport) => {
 
     // Point d'entrée pour la recherche de trajet
     // TODO: Faire en sorte que la recherche ne se fasse pas que sur la ville précise
-    app.get('/search-trajet/:lieu_depart/:lieu_arrivee/:heure_depart', function (req, res, next) {
+    app.get('/search-trajet/:lieu_depart/:lieu_arrivee/:heure_depart/', function (req, res, next) {
         if (!req.params.lieu_depart || !req.params.lieu_arrivee || !req.params.heure_depart)
             return res.send({success: false, message: 'Informations manquantes'});
 
@@ -435,7 +435,7 @@ module.exports = (passport) => {
 
 
     //Point d'entrée pour l'ajout de trajet
-    app.post('/propose-trajet', function(req, res, next){
+    app.post('/propose-trajet/', function(req, res, next){
         if(!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.prix || !req.body.heure_depart || !req.body.nbPlaces)
             return res.send({success: false, message: 'Informations manquantes'});
         
@@ -511,7 +511,7 @@ module.exports = (passport) => {
     });
 
 
-    app.get('/messages/liste-discussions', function (req, res, next) {
+    app.get('/messages/liste-discussions/', function (req, res, next) {
         dbHelper.message.byUser(req.session.passport.user)
         .then( result => {
             let promises = [];

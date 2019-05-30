@@ -18,7 +18,7 @@ async function renderListeTrajetsPage(context) {
         message:''
     };
 
-    fetch('/3D/api/search-trajet/' + lieu_depart + '/' + lieu_arrivee + '/' + heure_depart, {
+    fetch('/3D/api/search-trajet/' + lieu_depart + '/' + lieu_arrivee + '/' + heure_depart + '/', {
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',

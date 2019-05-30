@@ -6,7 +6,7 @@ let context = {};
 getMessages(context);
 
 async function getMessages(context) {
-    const response = await fetch('/api/messages/liste-discussions');
+    const response = await fetch('/3D/api/messages/liste-discussions/');
     if (context.message) {
         let msg = context.message;
         context = await response.json();
@@ -19,7 +19,7 @@ async function getMessages(context) {
 
 async function renderListeDiscussPage(context) {
     //console.log(context);
-    await renderTemplate(templates('/public/views/message/liste-discussions.html'), context);
+    await renderTemplate(templates('/3D/public/views/message/liste-discussions.html'), context);
     
     // const submit_btn = document.querySelector('.btn');
 
