@@ -20,7 +20,7 @@ async function getMessages(context) {
 
 async function renderListeDiscussPage(context) {
     //console.log(context);
-    await renderTemplate(templates('/3D/public/views/message/liste-discussions.html'), context);
+    await renderTemplate(templates('/3D/public/views/message/liste-discussions.mustache'), context);
     
     // const submit_btn = document.querySelector('.btn');
 
