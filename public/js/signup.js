@@ -6,7 +6,7 @@ let context = {};
 renderSignupPage(context);
 
 async function renderSignupPage(context) {
-    await renderTemplate(templates('/public/views/signup.html'), {});
+    await renderTemplate(templates('/3D/public/views/signup.mustache'), {});
     
     const submit_btn = document.querySelector('.btn');
 
@@ -19,7 +19,7 @@ async function renderSignupPage(context) {
         const password = document.querySelector('#inputPasswordSU').value;
         const passwordVerif = document.querySelector('#inputPasswordVerifSU').value;
 
-        fetch('/api/inscription', {
+        fetch('/3D/api/inscription', {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -29,12 +29,11 @@ async function renderSignupPage(context) {
             + '&photo=' + photo + '&password=' + password + '&passwordVerif=' + passwordVerif,
         })
         .then(function (response) {
-            console.log(response)
             if (response.ok) {
                 response.json()
                 .then((resp) => {
                     if (resp.success) {
-                        document.location.href = '/connexion';
+                        document.location.href = '/3D/connexion';
                     }
                     else {
                         renderSignupPage({...context, message: resp.message});

@@ -6,7 +6,7 @@ let context = {};
 renderProposerPage(context);
 
 async function renderProposerPage(context) {
-    await renderTemplate(templates('/public/views/trajet/proposer-trajet.html'), context);
+    await renderTemplate(templates('/3D/public/views/trajet/proposer-trajet.mustache'), context);
 
     const proposer = document.querySelector('#proposer-btn');
     proposer.addEventListener('click', function () {
@@ -18,7 +18,7 @@ async function renderProposerPage(context) {
         const heure_depart = parseInt(heure_depart_non_parsed[0] + heure_depart_non_parsed[1] + heure_depart_non_parsed[3] + heure_depart_non_parsed[4]);
         const nbPlaces = document.querySelector("#inputPassagers").value;
 
-        fetch('/api/propose-trajet', {
+        fetch('/3D/api/propose-trajet', {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',

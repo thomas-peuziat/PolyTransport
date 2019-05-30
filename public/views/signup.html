@@ -7,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-    <link rel="icon" type="image/png" sizes="32x32" href="/public/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/public/img/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/3D/public/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/3D/public/img/favicon-16x16.png">
 
     <!-- Style sheet -->
-    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/3D/public/css/style.css">
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -30,47 +30,11 @@
     <!-- Mustache ! -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" async></script>
 
-    <script src="/public/js/signup.js" type="module" defer></script>
+    <script src="/3D/public/js/signup.js" type="module" defer></script>
 </head>
 <body class="bg-secondary">
 <div id="wrapper" class="w-100 bg-light">
 
-    {{>topbar}}
-
-
-    <div id="sign-up" class="container w-75" onsubmit='return false;'>
-        <form class="form-sign" onsubmit='return false;'>
-            <h1 class="h3 mb-3 font-weight-normal">Inscription</h1>
-            {{#message}}<div  class="alert alert-warning">{{message}}</div>{{/message}}
-            <label for="inputNomSU" class="sr-only">Nom</label>
-            <input type="text" id="inputNomSU" class="form-control" placeholder="Nom" required="" autofocus="">
-
-            <label for="inputPrenomSU" class="sr-only">Prénom</label>
-            <input type="text" id="inputPrenomSU" class="form-control" placeholder="Prénom" required="" autofocus="">
-
-            <label for="inputEmailSU" class="sr-only">Adresse Email</label>
-            <input type="email" placeholder="toto@popo.cpp" class="form-control mt-3" id="inputEmailSU" required>
-
-            <label for="inputPhoneSU" class="sr-only">Téléphone portable</label>
-            <input type="tel" id="inputPhoneSU" class="form-control mt-3" placeholder="Téléphone portable"
-                   pattern="[0-9]{10}" required="" autofocus="">
-
-            <label for="inputPhotoSU" class="mt-3">Photo (facultatif)</label>
-            <input type="file" accept=".jpg,.jpeg,.png" class="form-control-file" id="inputPhotoSU">
-
-            <label for="inputPasswordSU" class="sr-only">Mot de passe</label>
-            <input type="password" id="inputPasswordSU" class="form-control mt-3" placeholder="Mot de passe"
-                   required="">
-
-            <label for="inputPasswordVerifSU" class="sr-only">Tapez à nouveau le mot de passe</label>
-            <input type="password" id="inputPasswordVerifSU" class="form-control"
-                   placeholder="Tapez à nouveau le mot de passe" required="">
-
-            <button class="btn btn-lg btn-primary btn-block mt-3" id="signup-btn" type="submit">S'inscrire</button>
-        </form>
-    </div>
-
-    {{>navbar}}
 </div>
 
 </body>

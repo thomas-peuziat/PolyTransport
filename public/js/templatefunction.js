@@ -22,8 +22,8 @@ const loadPartials = (() => {
     return async function loadPartials() {
         if (!partials) {
             partials = {
-                navbar: templates('/public/partials/navbar.mustache'),
-                topbar: templates('/public/partials/topbar.mustache'), 
+                navbar: templates('/3D/public/partials/navbar.mustache'),
+                topbar: templates('/3D/public/partials/topbar.mustache'),
             };
             const promises = Object.entries(partials)
                 .map(async function ([k, v]) {
@@ -31,6 +31,8 @@ const loadPartials = (() => {
                 });
             partials = Object.fromEntries(await Promise.all(promises));
         }
+
+        // TODO Modifier les partials pour avoir des variables ( https://stackoverflow.com/questions/15667011/is-it-possible-to-pass-variables-to-a-mustache-partial )
         return partials;
     }
 })();
@@ -39,9 +41,11 @@ const loadPartials = (() => {
 export async function renderTemplate(template, context) {
     // On charge les partials (si pas déà chargés)
     const partials = await loadPartials();
-    // console.log(partials);
     // On rend le template
     const rendered = Mustache.render(await template, context, partials);
-    let html = document.querySelector('html');
-    html.innerHTML = rendered;
+    //let html = document.querySelector('html');
+    //html.innerHTML = rendered;
+    let wrapper = document.querySelector('#wrapper');
+    wrapper.innerHTML = rendered;
+
 }

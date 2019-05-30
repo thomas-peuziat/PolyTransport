@@ -69,12 +69,9 @@ module.exports = (passport) => {
     app.get('/profil/:id_usr', function (req, res, next) {
         dbHelper.users.vehiculeById(req.params.id_usr).then(
             id_vehicule => {
-                console.log(id_vehicule);
                 if(id_vehicule.Id_vehicule !== null) {
-                    console.log('bite');
                     dbHelper.users.infosById(req.params.id_usr, id_vehicule.Id_vehicule).then(
                         infos => {
-                            console.log(infos);
                             res.set('Content-type', 'application/json');
                             res.send(JSON.stringify(infos));
                         },
@@ -85,7 +82,6 @@ module.exports = (passport) => {
                 }else {
                     dbHelper.users.infosByIdSansV(req.params.id_usr).then(
                         infos => {
-                            console.log(infos);
                             res.set('Content-type', 'application/json');
                             res.send(JSON.stringify(infos));
                         },
@@ -110,11 +106,9 @@ module.exports = (passport) => {
         if (req.body.marque) {
             dbHelper.vehicule.search(req.body.marque, req.body.modele, req.body.annee).then(result => {
                 let data = JSON.stringify(result);
-                console.log(data);
                 if (typeof data === 'undefined') {
                     dbHelper.vehicule.create(req.body.marque, req.body.modele, req.body.annee).then(result => {
                         dbHelper.vehicule.search(req.body.marque, req.body.modele, req.body.annee).then(result => {
-                            console.log(result);
                             dbHelper.users.update(req.params.id_usr, req.body.nom, req.body.prenom, req.body.email, req.body.phone, req.body.DDN, result.Id_vehicule).then(
                                 result => {
                                     res.send({success: true, message: 'Mise à jour de votre profil'});
@@ -164,6 +158,165 @@ module.exports = (passport) => {
             });
         }
         
+    });
+
+    app.get('/trajet/:id_trajet', function (req, res, next) {
+        if(!req.params.id_trajet)
+            return res.send({success: false, message: 'Informations manquantes'});
+
+        let id_trajet = req.params.id_trajet;
+        dbHelper.trajets.byId(id_trajet)
+            .then((resTrajet) => {
+                if(!resTrajet) {
+                    return res.send({
+                        success: false,
+                        message: 'Trajet inexistant'
+                    });
+                }
+
+                let promises = [];
+
+                promises.push(
+                    new Promise(resolve => {
+                        // Get ville depart
+                        dbHelper.lieu.byId(resTrajet.Id_lieu_depart)
+                            .then(function(lieu) {
+                                resolve(['depart', lieu.Ville]);
+                            })
+                    })
+                );
+
+                promises.push(
+                    new Promise(resolve => {
+                        // Get ville arrivee
+                        dbHelper.lieu.byId(resTrajet.Id_lieu_arrivee)
+                            .then(function(lieu) {
+                                resolve(['arrivee', lieu.Ville]);
+                            })
+                    })
+                );
+
+                promises.push(
+                    new Promise(resolve => {
+                        // Get conducteur
+                        dbHelper.users.byIdGetName(resTrajet.Id_conducteur)
+                            .then(function(user) {
+                                resolve(['conducteur', {
+                                    nom: user.Nom,
+                                    prenom: user.Prenom,
+                                    vehicule: {
+                                        id: user.Id_vehicule
+                                    },
+                                    image: user.Image
+                                }]);
+                            })
+                    })
+                );
+
+                Promise.all(promises)
+                    .then((promisesRes) => {
+                        let mapRes = new Map(promisesRes);
+                        let heureDepText = heureIntToText(resTrajet.Heure);
+                        let heureArrText = heureIntToText(resTrajet.Heure_Arrivee);
+
+                        let vehiculePromise = new Promise(resolve => {
+
+                            // Get vehicule
+                            dbHelper.vehicule.byId(mapRes.get('conducteur').vehicule.id)
+                                .then((vehicule) => {
+                                    resolve({
+                                        id: mapRes.get('conducteur').vehicule.id,
+                                        marque: vehicule.Marque,
+                                        modele: vehicule.Modele,
+                                        annee: vehicule.Annee,
+                                        image: vehicule.Image
+                                    });
+                                })
+                                .catch(() => {
+                                    resolve({});
+                                });
+                        });
+
+                        vehiculePromise
+                            .then((vehicule) => {
+                                let trajet = {
+                                    prix: resTrajet.Prix,
+                                    nbPlaces: resTrajet.Nb_places,
+                                    conducteur: {
+                                        nom: mapRes.get('conducteur').nom,
+                                        prenom: mapRes.get('conducteur').prenom,
+                                        vehicule: vehicule,
+                                        image: mapRes.get('conducteur').image,
+                                        id: resTrajet.Id_conducteur
+                                    },
+                                    depart: {
+                                        lieu: mapRes.get('depart'),
+                                        heure: heureDepText
+                                    },
+                                    arrivee: {
+                                        lieu: mapRes.get('arrivee'),
+                                        heure: heureArrText
+                                    },
+                                };
+
+                                return res.send({
+                                    success: true,
+                                    trajet: trajet
+                                });
+                            });
+                    });
+            })
+            .catch(function () {
+                return res.send({
+                    success: false,
+                    message: 'Trajet inexistant'
+                });
+            });
+
+    });
+
+    app.post('/trajet/reserver', function(req, res, next){
+        let idTrajet = req.body.id_trajet;
+        //on récupère le nombre de places disponibles
+        dbHelper.trajets.byIdGetNbPlaces(idTrajet)
+        .then(resultat => {
+            if(resultat.Nb_places > 0){
+                dbHelper.passager.byIds(req.session.passport.user, idTrajet)
+                .then(resReq => {
+                    //si l'user a déjà reservé pour ce trajet
+                    if(typeof resReq !== "undefined" && resReq.Id_usr === req.session.passport.user){
+                        return res.send({success: false, messageErreur: 'Vous avez déjà réservé pour ce trajet'});
+                    }
+                    else{
+                        //MAJ du nombre de places disponible
+                        dbHelper.trajets.updateNbPlaces(idTrajet, resultat.Nb_places-1)
+                        .then(()=>{
+                            //on créé un nouveau passager
+                            dbHelper.passager.create(req.session.passport.user, idTrajet)
+                            .then(()=>{
+                                return res.send({success: true, messageValide: 'Réservation effectuée'});
+                            })
+                            .catch(function(error){
+                                return res.send({success: false, messageErreur: 'Erreur1 Base de données '+ error});
+                            });
+                        })
+                        .catch(function(error){
+                            return res.send({success: false, messageErreur: 'Erreur2 Base de données '+ error});
+                        });
+                    }
+                }).catch(function(error){
+                    return res.send({success: false, messageErreur: 'Erreur3 Base de données '+ error});
+                });
+
+            }
+            else{
+                return res.send({success: false, messageErreur: 'Aucune place de libre'});
+
+            }
+        }).catch(function(error){
+            return res.send({success: false, messageErreur: 'Erreur4 Base de données '+ error});
+        });
+
     });
 
     // Point d'entrée pour la recherche de trajet
@@ -275,7 +428,7 @@ module.exports = (passport) => {
             .catch(function () {
                 return res.send({
                     success: false,
-                    message: 'Lieu départ inexistant\n'
+                    message: 'Lieu départ inexistant'
                 });
             });
     });
