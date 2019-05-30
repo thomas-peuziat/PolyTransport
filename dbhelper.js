@@ -19,7 +19,7 @@ const db = new sqlite3.Database('./PolyTransport.db', sqlite3.OPEN_READWRITE, fu
 // Rend la fonction get de l'api sqlite compatible avec les promesses
 const get = sql => new Promise(function (resolve, reject) {
     db.get(sql, function (err, row) {
-        console.log(sql);
+        // console.log(sql);
         if (err) {
             reject(err);
         }
@@ -31,7 +31,7 @@ const get = sql => new Promise(function (resolve, reject) {
 
 const run = sql => new Promise(function (resolve, reject) {
     db.run(sql, function (err, row) {
-        console.log(sql);
+        // console.log(sql);
         if (err) {
             reject(err);
         }
@@ -43,7 +43,7 @@ const run = sql => new Promise(function (resolve, reject) {
 
 // Idem pour la fonction all
 const all = sql => new Promise(function (resolve, reject) {
-    console.log(sql);
+    // console.log(sql);
     db.all(sql, function (err, rows) {
         if (err) {
             reject(err);
@@ -84,7 +84,7 @@ module.exports.trajets = {
         all(`select Id_conducteur, Prix, Heure, Heure_Arrivee, Nb_places, Id_trajet from TRAJET 
             where Id_lieu_depart=${lieuDep} 
               and Id_lieu_arrivee=${lieuArr} 
-              and Heure > ${heure}`),
+              and Heure >= ${heure}`),
     //ATTENTION : vérifier que les id lieux et id_conducteur existent
     create: (etat, note, commentaire, km, prix, etatPaiement, idPaypalPaiement, heureDep, heureArr, idLieuDep, idLieuArr, idConducteur, nbPlace) => run(`INSERT INTO TRAJET (Etat, Note, Commentaire, Kilometres, Prix, Etat_payement, Id_paypal_paiement, Heure, Heure_Arrivee, Id_lieu_depart, Id_lieu_arrivee, Id_conducteur, Nb_places)
     VALUES (${etat}, ${note}, '${commentaire}', ${km}, ${prix}, ${etatPaiement}, '${idPaypalPaiement}', ${heureDep}, '${heureArr}', ${idLieuDep}, ${idLieuArr}, ${idConducteur}, ${nbPlace});`),
@@ -100,4 +100,8 @@ module.exports.vehicule = {
     search: (marque, modele, annee) => get(`select Id_vehicule from VEHICULE where Marque = '${marque}' and  Modele = '${modele}' and Annee = ${annee} `),
     create: (marque, modele, annee) => run(`insert into VEHICULE (Marque, Modele, Annee) values ('${marque}', '${modele}', ${annee} )`),
     byId: id => get(`select Marque, Modele, Annee from VEHICULE where Id_vehicule = ${id}`),
+};
+
+module.exports.message = {
+    byUser: (id) => all(`select Id_usr_expediteur, Message_text from Message where Id_usr_expediteur = ${id} or Id_usr_destinataire = ${id}`),
 };

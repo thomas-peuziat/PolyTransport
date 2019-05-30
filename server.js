@@ -15,6 +15,7 @@ const connexionRouter = require('./routes/connexionroute');
 const inscriptionRouter = require('./routes/inscriptionroute');
 const trajetRouter = require('./routes/trajetroute');
 const profilRouter = require('./routes/profilroute');
+const messagesRouter = require('./routes/messagesroute');
 // on met en place une authentification valide pour toute le site
 const passport = auth(app);
 
@@ -29,7 +30,8 @@ app.use('/', indexRouter);
 app.use('/connexion', connexionRouter);
 app.use('/inscription', inscriptionRouter);
 app.use('/trajet', require('connect-ensure-login').ensureLoggedIn('/connexion'), trajetRouter);
-app.use('/profil', require('connect-ensure-login').ensureLoggedIn('/connexion'), profilRouter)
+app.use('/profil', require('connect-ensure-login').ensureLoggedIn('/connexion'), profilRouter);
+app.use('/messages', require('connect-ensure-login').ensureLoggedIn('/connexion'), messagesRouter);
 //app.use('/proposertrajet', proposerRouter); //added
 
 // Erreur 404

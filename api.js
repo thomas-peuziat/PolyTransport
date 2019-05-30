@@ -356,6 +356,56 @@ module.exports = (passport) => {
         });
 
     });
+
+
+    app.get('/messages/liste-discussions', function (req, res, next) {
+        dbHelper.message.byUser(req.session.passport.user)
+        .then( result => {
+            let promises = [];
+            let messages = [];
+            result.forEach(function (msg) {
+                promises.push(
+                    new Promise(resolve => {
+                        dbHelper.users.byIdGetName(msg.Id_usr_expediteur)
+                        .then(user => {
+                            console.log(user);
+                            let data = {
+                                nom: user.Nom + ' ' + user.Prenom,
+                                message: msg.Message_text,
+                            };
+                            messages.push(data);
+                            resolve(messages);
+                        });
+                    })
+                );        
+            });
+
+            Promise.all(promises)
+            .then(messages => {
+                console.log(messages[0]);
+                if(messages.length > 0) {
+                    return res.send({
+                        success: true,
+                        messages: messages[0]
+                    });
+                } else {
+                    return res.send({
+                        success: false,
+                        message: 'Aucun message disponible'
+                    });
+                }            
+                
+                },
+                err => {
+                    res.send({success: false, messageErreur: 'bad request'});
+                    next(err);
+                })
+                .catch(function(error){
+                    return res.send({success: false, messageErreur: 'Erreur Base de données '+ error});
+                });
+            });
+            
+    });
     
     return app;
 
