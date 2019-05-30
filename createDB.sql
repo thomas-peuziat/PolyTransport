@@ -76,6 +76,7 @@ CREATE TABLE Message(
 	Id_usr_expediteur     	INTEGER NOT NULL ,
 	Id_usr_destinataire    	INTEGER NOT NULL ,
 	Message_text            TEXT NOT NULL,
+	Heure					DATETIME NOT NULL,
 	CONSTRAINT Message_PK PRIMARY KEY (Id_usr_expediteur,Id_usr_destinataire)
 
 	,CONSTRAINT Message_UTILISATEUR_FK FOREIGN KEY (Id_usr_expediteur) REFERENCES UTILISATEUR(Id_usr)

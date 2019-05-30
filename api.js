@@ -512,34 +512,87 @@ module.exports = (passport) => {
 
 
     app.get('/messages/liste-discussions/', function (req, res, next) {
-        dbHelper.message.byUser(req.session.passport.user)
-        .then( result => {
-            let promises = [];
-            let messages = [];
-            result.forEach(function (msg) {
-                promises.push(
+        let tab_usr = [];
+        let nb_amis = 0; 
+        let promises = [];
+        let promises2 = [];
+        promises.push(
+            new Promise(resolve => {
+                dbHelper.message.byId(req.session.passport.user)
+                .then(idusr => {
+                    idusr.forEach(function (id) {
+                        let found_exp = tab_usr.find(elt => elt === id.Id_usr_expediteur);
+                        if (id.Id_usr_expediteur !== req.session.passport.user  && typeof found_exp === 'undefined' ) {
+                            nb_amis += 1;
+                            tab_usr.push(id.Id_usr_expediteur);
+                        } else {
+                            let found_dest = tab_usr.find(elt => elt === id.Id_usr_destinataire);
+                            if (id.Id_usr_destinataire !== req.session.passport.user  && typeof found_dest === 'undefined' ) {
+                                nb_amis += 1;
+                                tab_usr.push(id.Id_usr_destinataire);
+                            }
+                        }
+
+                    });
+                    
+                    resolve(tab_usr);
+                });
+            })
+        );
+        Promise.all(promises)
+        .then((usr) => {
+            //console.log(tab_msg);
+            tab_usr = [];
+            let i = 0;
+
+            for (let i = 0; i < usr[0].length; i++) {
+                promises2.push(
                     new Promise(resolve => {
-                        dbHelper.users.byIdGetName(msg.Id_usr_expediteur)
+                        //console.log(usr[0][i]);
+                        dbHelper.users.byIdGetName(usr[0][i])
                         .then(user => {
-                            console.log(user);
                             let data = {
+                                id_usr: usr[0][i],
                                 nom: user.Nom + ' ' + user.Prenom,
-                                message: msg.Message_text,
                             };
-                            messages.push(data);
-                            resolve(messages);
+                            //tab_usr.push(data);
+                            resolve(data);
                         });
                     })
-                );        
-            });
+                );
+            };
 
-            Promise.all(promises)
-            .then(messages => {
-                console.log(messages[0]);
+            for (let i = 0; i < usr[0].length; i++) {
+                promises2.push(
+                    new Promise(resolve => {
+                        dbHelper.message.getLastMessage(req.session.passport.user, usr[0][i])
+                        .then(data => {
+                            //tab_msg.push({msg: data.Message_text, Heure : data.Heure}); 
+                            resolve({msg: data.Message_text, Heure : data.Heure});
+                        });
+                        
+                    
+                    })
+                );     
+            }               
+
+            Promise.all(promises2)
+            .then((result) => {
+                let messages = [];
+                for (let i = 0; i < nb_amis; i++) {
+                    let data = {
+                        id_usr: result[i].id_usr,
+                        nom: result[i].nom,
+                        msg: result[i+nb_amis].msg, 
+                        Heure : result[i+nb_amis].Heure
+                    }
+                    messages.push(data);
+                }
+                console.log(messages);
                 if(messages.length > 0) {
                     return res.send({
                         success: true,
-                        messages: messages[0]
+                        messages: messages
                     });
                 } else {
                     return res.send({
@@ -553,10 +606,56 @@ module.exports = (passport) => {
                     res.send({success: false, messageErreur: 'bad request'});
                     next(err);
                 })
-                .catch(function(error){
-                    return res.send({success: false, messageErreur: 'Erreur Base de données '+ error});
-                });
+            .catch(function(error){
+                return res.send({success: false, messageErreur: 'Erreur Base de données '+ error});
             });
+        });
+
+        // dbHelper.message.byUser(req.session.passport.user)
+        // .then( result => {
+        //     let promises = [];
+        //     let messages = [];
+        //     result.forEach(function (msg) {
+        //         promises.push(
+        //             new Promise(resolve => {
+        //                 dbHelper.users.byIdGetName(msg.Id_usr_expediteur)
+        //                 .then(user => {
+        //                     console.log(user);
+        //                     let data = {
+        //                         nom: user.Nom + ' ' + user.Prenom,
+        //                         message: msg.Message_text,
+        //                     };
+        //                     messages.push(data);
+        //                     resolve(messages);
+        //                 });
+        //             })
+        //         );        
+        //     });
+
+        //     Promise.all(promises)
+        //     .then(messages => {
+        //         console.log(messages[0]);
+        //         if(messages.length > 0) {
+        //             return res.send({
+        //                 success: true,
+        //                 messages: messages[0]
+        //             });
+        //         } else {
+        //             return res.send({
+        //                 success: false,
+        //                 message: 'Aucun message disponible'
+        //             });
+        //         }            
+                
+        //         },
+        //         err => {
+        //             res.send({success: false, messageErreur: 'bad request'});
+        //             next(err);
+        //         })
+        //         .catch(function(error){
+        //             return res.send({success: false, messageErreur: 'Erreur Base de données '+ error});
+        //         });
+        //     });
             
     });
     
