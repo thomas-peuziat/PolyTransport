@@ -106,6 +106,7 @@ module.exports.message = {
     byUser: (id) => all(`select distinct Id_usr_expediteur, Message_text from Message where Id_usr_expediteur = ${id} or Id_usr_destinataire = ${id}`),
     byId: (id) => all(`select distinct Id_usr_expediteur, Id_usr_destinataire from Message where Id_usr_expediteur = ${id} or Id_usr_destinataire = ${id}`),
     getLastMessage: (id_usr, id_ami) => get(`SELECT Message_text, Heure FROM Message WHERE (Id_usr_expediteur = ${id_usr} or Id_usr_destinataire = ${id_usr}) and (Id_usr_expediteur = ${id_ami} or Id_usr_destinataire = ${id_ami}) Order by Heure DESC limit 1;`),
+    getMessages: (id_usr, id_ami) => all(`SELECT Id_usr_expediteur, Id_usr_destinataire, Message_text as text FROM Message WHERE (Id_usr_expediteur = ${id_usr} or Id_usr_destinataire = ${id_usr}) and (Id_usr_expediteur = ${id_ami} or Id_usr_destinataire = ${id_ami}) Order by Heure`),
     create: (id_expediteur, id_destinataire, msg ) => run(`insert into Message (Id_usr_expediteur, Id_usr_destinataire, Message_text, Heure) values ('${id_expediteur}', '${id_destinataire}', ${msg}, datetime('now') )`),
 
 };

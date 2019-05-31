@@ -14,8 +14,8 @@ async function getMessages(context) {
     }
     else 
         context = await response.json();
-        console.log(context);
-        renderListeDiscussPage(context);
+    console.log(context);
+    renderListeDiscussPage(context);
 }
 
 async function renderListeDiscussPage(context) {

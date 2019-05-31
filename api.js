@@ -567,14 +567,14 @@ module.exports = (passport) => {
                     new Promise(resolve => {
                         dbHelper.message.getLastMessage(req.session.passport.user, usr[0][i])
                         .then(data => {
-                            //tab_msg.push({msg: data.Message_text, Heure : data.Heure});
+                            //tab_msg.push({msg: data.Message_text, Heure : data.Heure}); 
                             resolve({msg: data.Message_text, Heure : data.Heure});
                         });
-
-
+                        
+                    
                     })
-                );
-            }
+                );     
+            }               
 
             Promise.all(promises2)
             .then((result) => {
@@ -611,52 +611,38 @@ module.exports = (passport) => {
             });
         });
 
-        // dbHelper.message.byUser(req.session.passport.user)
-        // .then( result => {
-        //     let promises = [];
-        //     let messages = [];
-        //     result.forEach(function (msg) {
-        //         promises.push(
-        //             new Promise(resolve => {
-        //                 dbHelper.users.byIdGetName(msg.Id_usr_expediteur)
-        //                 .then(user => {
-        //                     console.log(user);
-        //                     let data = {
-        //                         nom: user.Nom + ' ' + user.Prenom,
-        //                         message: msg.Message_text,
-        //                     };
-        //                     messages.push(data);
-        //                     resolve(messages);
-        //                 });
-        //             })
-        //         );        
-        //     });
+    });
 
-        //     Promise.all(promises)
-        //     .then(messages => {
-        //         console.log(messages[0]);
-        //         if(messages.length > 0) {
-        //             return res.send({
-        //                 success: true,
-        //                 messages: messages[0]
-        //             });
-        //         } else {
-        //             return res.send({
-        //                 success: false,
-        //                 message: 'Aucun message disponible'
-        //             });
-        //         }            
-                
-        //         },
-        //         err => {
-        //             res.send({success: false, messageErreur: 'bad request'});
-        //             next(err);
-        //         })
-        //         .catch(function(error){
-        //             return res.send({success: false, messageErreur: 'Erreur Base de données '+ error});
-        //         });
-        //     });
-            
+    app.get('/messages/discussion/:id_friend/', function (req, res, next) {
+        let promises = [];
+        dbHelper.message.getMessages(req.session.passport.user, req.params.id_friend)
+        .then( data => {
+            data.forEach( function (msg) {
+                promises.push(
+                    new Promise(resolve => {
+                        if(msg.Id_usr_expediteur === req.session.passport.user)
+                            resolve({me: {text: msg.text}});
+                        else
+                            resolve({friend: {text: msg.text}});
+                    })
+                );
+            });
+
+            Promise.all(promises)
+            .then(messages => {
+                if(messages.length > 0) {
+                    return res.send({
+                        success: true,
+                        message: messages,
+                    });
+                } else {
+                    return res.send({
+                        success: false,
+                        message: 'Aucun message disponible',
+                    });
+                }
+            });
+        });
     });
 
     app.post('/trajet/notification/',function (req, res, next){
