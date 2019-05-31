@@ -1,7 +1,5 @@
 let express = require('express');
 let router = express.Router();
-//const accueil = require('../public/js/conn_get');
-//const conn = require('../public/js/conn');
 
 router.post('/', function(req, res, next) {
 

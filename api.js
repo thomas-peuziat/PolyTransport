@@ -40,7 +40,6 @@ module.exports = (passport) => {
         })(req, res, next);
     });
 
-
     app.post('/inscription/', function (req, res, next) {
         if (!req.body.nom)
             return res.send({success: false, message: 'empty name'});
@@ -90,19 +89,14 @@ module.exports = (passport) => {
                         },
                     );
                 }
-
             },
             err => {
                 next(err);
             },
         );
-
-
     });
 
     app.put('/profil/:id_usr/', function (req, res, next) {
-        // if (!req.body.nom || !req.body.prenom || !req.body.email || !req.body.phone || !req.body.DDN)
-        //     return res.send({success: false, message: 'Informations manquantes'});
         if (req.body.marque) {
             dbHelper.vehicule.search(req.body.marque, req.body.modele, req.body.annee).then(result => {
                 let data = JSON.stringify(result);

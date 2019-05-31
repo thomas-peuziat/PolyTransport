@@ -19,7 +19,6 @@ const messagesRouter = require('./routes/messagesroute');
 // on met en place une authentification valide pour toute le site
 const passport = auth(app);
 
-// l'api d'accès aux données sera disponible sous la route "/api"
 app.use('/3D/api/', api(passport));
 
 // Le contenu statique public sera lu à partir du repertoire 'public'

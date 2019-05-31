@@ -13,7 +13,6 @@ async function renderDetailTrajetPage(context) {
     let id_trajet =url.searchParams.get('id_trajet');
     let trajet;
     context = {
-        //trajets:[],
         message:''
     };
 

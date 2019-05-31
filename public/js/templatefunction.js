@@ -43,8 +43,6 @@ export async function renderTemplate(template, context) {
     const partials = await loadPartials();
     // On rend le template
     const rendered = Mustache.render(await template, context, partials);
-    //let html = document.querySelector('html');
-    //html.innerHTML = rendered;
     let wrapper = document.querySelector('#wrapper');
     wrapper.innerHTML = rendered;
 

@@ -14,7 +14,6 @@ async function renderRechercherPage(context) {
 
         const lieu_depart = document.querySelector('#inputDeparture').value;
         const lieu_arrivee = document.querySelector('#inputArrival').value;
-        //const date_depart = document.querySelector('#inputDate').value;
 
         const nonParsedHeure_depart = document.querySelector('#inputHour').value;
         const numHeure_depart = parseInt(nonParsedHeure_depart[0] + nonParsedHeure_depart[1] + nonParsedHeure_depart[3] + nonParsedHeure_depart[4]);

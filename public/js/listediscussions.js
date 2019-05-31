@@ -14,48 +14,9 @@ async function getMessages(context) {
     }
     else 
         context = await response.json();
-    console.log(context);
     renderListeDiscussPage(context);
 }
 
 async function renderListeDiscussPage(context) {
-    //console.log(context);
     await renderTemplate(templates('/3D/public/views/message/liste-discussions.mustache'), context);
-    
-    // const submit_btn = document.querySelector('.btn');
-
-    // submit_btn.addEventListener('click', function () {
-    //     const nom = document.querySelector('#inputNomSU').value;
-    //     const prenom = document.querySelector('#inputPrenomSU').value;
-    //     const email = document.querySelector('#inputEmailSU').value;
-    //     const phone = document.querySelector('#inputPhoneSU').value;
-    //     const photo = document.querySelector('#inputPhotoSU').value;
-    //     const password = document.querySelector('#inputPasswordSU').value;
-    //     const passwordVerif = document.querySelector('#inputPasswordVerifSU').value;
-
-    //     fetch('/api/inscription', {
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
-    //         },
-    //         method: 'POST',
-    //         body: 'nom=' + nom + '&prenom=' + prenom + '&email=' + email + '&phone=' + phone
-    //         + '&photo=' + photo + '&password=' + password + '&passwordVerif=' + passwordVerif,
-    //     })
-    //     .then(function (response) {
-    //         console.log(response)
-    //         if (response.ok) {
-    //             response.json()
-    //             .then((resp) => {
-    //                 if (resp.success) {
-    //                     document.location.href = '/connexion';
-    //                 }
-    //                 else {
-    //                     renderSignupPage({...context, message: resp.message});
-    //                 }
-    //             });
-    //         }
-    
-    //     });
-    // });
 }
