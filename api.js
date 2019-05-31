@@ -567,14 +567,14 @@ module.exports = (passport) => {
                     new Promise(resolve => {
                         dbHelper.message.getLastMessage(req.session.passport.user, usr[0][i])
                         .then(data => {
-                            //tab_msg.push({msg: data.Message_text, Heure : data.Heure}); 
+                            //tab_msg.push({msg: data.Message_text, Heure : data.Heure});
                             resolve({msg: data.Message_text, Heure : data.Heure});
                         });
-                        
-                    
+
+
                     })
-                );     
-            }               
+                );
+            }
 
             Promise.all(promises2)
             .then((result) => {
@@ -658,7 +658,102 @@ module.exports = (passport) => {
         //     });
             
     });
-    
+
+    app.post('/trajet/notification/',function (req, res, next){
+        if(!req.body.id_destinataire || !req.body.id_trajet)
+            return res.send({success: false, message: 'Informations manquantes'});
+
+        let idPassager = req.session.passport.user;
+        let idDestinataire = req.body.id_destinataire;
+        let idTrajet = req.body.id_trajet;
+
+        dbHelper.passager.byIds(idPassager, idTrajet)
+            .then(resReq => {
+                //si le passager a bien réservé pour ce trajet
+                if(typeof resReq !== "undefined" && resReq.Id_usr === idPassager){
+
+                    dbHelper.trajets.byId(idTrajet)
+                        .then((resTrajet) => {
+                            if (!resTrajet) {
+                                return res.send({
+                                    success: false,
+                                    message: 'Trajet inexistant'
+                                });
+                            }
+
+                            let promises = [];
+
+                            promises.push(
+                                new Promise(resolve => {
+                                    // Get ville depart
+                                    dbHelper.lieu.byId(resTrajet.Id_lieu_depart)
+                                        .then(function (lieu) {
+                                            resolve(['depart', lieu.Ville]);
+                                        })
+                                })
+                            );
+
+                            promises.push(
+                                new Promise(resolve => {
+                                    // Get ville arrivee
+                                    dbHelper.lieu.byId(resTrajet.Id_lieu_arrivee)
+                                        .then(function (lieu) {
+                                            resolve(['arrivee', lieu.Ville]);
+                                        })
+                                })
+                            );
+
+                            Promise.all(promises)
+                                .then((promisesRes) => {
+                                    let mapRes = new Map(promisesRes);
+                                    let heureDepText = heureIntToText(resTrajet.Heure);
+                                    let heureArrText = heureIntToText(resTrajet.Heure_Arrivee);
+                                    let depart = {
+                                        lieu: mapRes.get('depart'),
+                                        heure: heureDepText
+                                    };
+                                    let arrivee = {
+                                        lieu: mapRes.get('arrivee'),
+                                        heure: heureArrText
+                                    };
+
+                                    let promisesNotif = [];
+
+                                    promisesNotif.push(
+                                        dbHelper.message.create(idPassager, idDestinataire,
+                                            '[RESERVATION TRAJET ID: ' + idTrajet + '] : ' +
+                                            'Je serais passager pour le trajet de ' + depart.lieu + ' (' + depart.heure + ') ' +
+                                            'vers ' + arrivee.lieu + ' (' + arrivee.heure + ').')
+                                    );
+
+                                    promisesNotif.push(
+                                        dbHelper.message.create(idDestinataire, idPassager,
+                                            '[RESERVATION TRAJET ID: ' + idTrajet + '] : ' +
+                                            'Vous êtes passager pour le trajet de ' + depart.lieu + ' (' + depart.heure + ') ' +
+                                            'vers ' + arrivee.lieu + ' (' + arrivee.heure + ').')
+                                    );
+
+                                    Promise.all(promisesNotif)
+                                        .then(() => {
+                                            return res.send({
+                                                success: true,
+                                                messageValide: 'Réservation effectuée, notifications envoyées'
+                                            });
+                                        })
+                                        .catch(function (error) {
+                                            return res.send({
+                                                success: false,
+                                                messageErreur: 'Erreur10 Base de données ' + error
+                                            });
+                                        });
+                                });
+                        });
+                } else {
+                    return res.send({success: false, messageErreur: 'Erreur, contactez l\'administrateur :)'});
+                }
+            });
+    });
+
     return app;
 
 };
