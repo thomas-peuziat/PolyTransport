@@ -1,7 +1,6 @@
-
 {{>topbar}}
 
-<a href="/3D/trajet/rechercher">
+<a href="/3D/trajet/rechercher/">
     <button type="button" class="ml-3 mt-3 pl-4 pr-4 btn btn-primary go-back">
         <img src="/3D/public/img/vectorpaint.svg" alt="go_back">
     </button>
@@ -13,6 +12,10 @@
             {{message}}
         </div>
     {{/message}}
+
+    {{#messageValide}}<div  class="alert alert-success">{{messageValide}}</div>{{/messageValide}}
+    {{#messageErreur}}<div  class="alert alert-danger">{{messageErreur}}</div>{{/messageErreur}}
+
 
     {{#trajet}}
         <div class="mt-3 container column justify-content-center align-items-center">
@@ -43,7 +46,7 @@
             </div>
             <div class="row justify-content-around">
                 <a href="#" class="btn btn-lg btn-info col-5">Poser une question...</a>
-                <a href="#" class="btn btn-lg btn-success col-5">Réserver</a>
+                <a href="#" id="reservation" class="btn btn-lg btn-success col-5">Réserver</a>
             </div>
         </div>
     {{/trajet}}
