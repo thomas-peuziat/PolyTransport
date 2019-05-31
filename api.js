@@ -278,11 +278,12 @@ module.exports = (passport) => {
     app.post('/trajet/reserver/', function(req, res, next){
         let idTrajet = req.body.id_trajet;
 
-
-
-        //on récupère le nombre de places disponibles
-        dbHelper.trajets.byIdGetNbPlaces(idTrajet)
+        //on récupère le nombre de places disponibles et on vérifie que le trajet n'est pas à nous
+        dbHelper.trajets.byId(idTrajet)
         .then(resultat => {
+            if(resultat.Id_conducteur === req.session.passport.user) {
+                return res.send({success: false, messageErreur: 'Vous ne pouvez pas réserver pour votre trajet'});
+            }
             if(resultat.Nb_places > 0){
                 dbHelper.passager.byIds(req.session.passport.user, idTrajet)
                 .then(resReq => {
