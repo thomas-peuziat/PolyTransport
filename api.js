@@ -277,6 +277,9 @@ module.exports = (passport) => {
 
     app.post('/trajet/reserver/', function(req, res, next){
         let idTrajet = req.body.id_trajet;
+
+
+
         //on récupère le nombre de places disponibles
         dbHelper.trajets.byIdGetNbPlaces(idTrajet)
         .then(resultat => {
@@ -541,14 +544,12 @@ module.exports = (passport) => {
         );
         Promise.all(promises)
         .then((usr) => {
-            //console.log(tab_msg);
             tab_usr = [];
             let i = 0;
 
             for (let i = 0; i < usr[0].length; i++) {
                 promises2.push(
                     new Promise(resolve => {
-                        //console.log(usr[0][i]);
                         dbHelper.users.byIdGetName(usr[0][i])
                         .then(user => {
                             let data = {
@@ -588,7 +589,6 @@ module.exports = (passport) => {
                     }
                     messages.push(data);
                 }
-                console.log(messages);
                 if(messages.length > 0) {
                     return res.send({
                         success: true,
@@ -703,34 +703,25 @@ module.exports = (passport) => {
                                         heure: heureArrText
                                     };
 
-                                    let promisesNotif = [];
-
-                                    promisesNotif.push(
-                                        dbHelper.message.create(idPassager, idDestinataire,
-                                            '[RESERVATION TRAJET ID: ' + idTrajet + '] : ' +
-                                            'Je serais passager pour le trajet de ' + depart.lieu + ' (' + depart.heure + ') ' +
-                                            'vers ' + arrivee.lieu + ' (' + arrivee.heure + ').')
-                                    );
-
-                                    promisesNotif.push(
-                                        dbHelper.message.create(idDestinataire, idPassager,
-                                            '[RESERVATION TRAJET ID: ' + idTrajet + '] : ' +
-                                            'Vous êtes passager pour le trajet de ' + depart.lieu + ' (' + depart.heure + ') ' +
-                                            'vers ' + arrivee.lieu + ' (' + arrivee.heure + ').')
-                                    );
-
-                                    Promise.all(promisesNotif)
-                                        .then(() => {
-                                            return res.send({
-                                                success: true,
-                                                messageValide: 'Réservation effectuée, notifications envoyées'
-                                            });
-                                        })
-                                        .catch(function (error) {
-                                            return res.send({
-                                                success: false,
-                                                messageErreur: 'Erreur10 Base de données ' + error
-                                            });
+                                    dbHelper.users.byIdGetName(idPassager)
+                                        .then((passager) => {
+                                            dbHelper.message.create(idPassager, idDestinataire,
+                                                '[RESERVATION TRAJET ID: ' + idTrajet + '] : ' +
+                                                passager.Prenom + ' ' + passager.Nom +
+                                                ' sera passager pour le trajet de ' + depart.lieu + ' (' + depart.heure + ') ' +
+                                                'vers ' + arrivee.lieu + ' (' + arrivee.heure + ').')
+                                                .then( () => {
+                                                    return res.send({
+                                                        success: true,
+                                                        messageValide: 'Réservation effectuée, notifications envoyées'
+                                                    });
+                                                })
+                                                .catch(function (error) {
+                                                    return res.send({
+                                                        success: false,
+                                                        messageErreur: 'Réservation effectuée, problème notification :' + error
+                                                    });
+                                                });
                                         });
                                 });
                         });
