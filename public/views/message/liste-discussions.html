@@ -6,11 +6,11 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="icon" type="image/png" sizes="32x32" href="/public/img/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/public/img/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/3D/public/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/3D/public/img/favicon-16x16.png">
 
     <!-- Style sheet -->
-    <link rel="stylesheet" href="/public/css/style.css">
+    <link rel="stylesheet" href="/3D/public/css/style.css">
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -28,35 +28,11 @@
     <!-- Mustache ! -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" async></script>
 
-    <!--    <script src="../js/main.js" defer="defer"></script>-->
+       <script src="/3D/public/js/listediscussions.js"  type="module" defer></script>
 </head>
 <body class="bg-secondary">
 <div id="wrapper" class="w-100 bg-light">
-    <nav class="container-fluid navbar navbar-dark bg-dark">
-        <span class="h1 text-light">PolyTransport</span>
-    </nav>
-        <!-- {{>topbar}} -->
 
-    {{#messages}}
-        <div class="m-3">    
-            <a href="#" class="lien">
-                <div class="card">
-                    <h5 class="card-header">{{nom}} - {{date dernier message}}</h5>
-                    <div class="card-body">
-                        <span><img class="d-inline" src="../../img/baseline-mail_outline-24px.svg" alt="message">
-                        <p class="card-text d-inline">{{trajet concerné}}</p></span>
-                    </div>
-                </div>
-            </a>
-        </div>
-    {{/messages}}
-    
-    <!-- {{>navbar}} -->
-    <nav id="bottom-nav" class="container-fluid navbar fixed-bottom navbar-light bg-light border-top justify-content-around">
-        <a href="#"><img src="../../img/outline-map-24px.svg" alt="outline-map"></a>
-        <a href="#"><img src="../../img/outline-account_circle-24px.svg" alt="outline-account_circle"></a>
-        <a href="#"><img src="../../img/outline-chat-24px.svg" alt="outline-chat"></a>
-    </nav>
 </div>
 
 </body>

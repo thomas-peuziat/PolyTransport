@@ -2,4 +2,4 @@
 
 import { renderTemplate, templates } from './templatefunction.js';
 
-renderTemplate(templates('/public/views/trajet/accueil.mustache'), {});
+renderTemplate(templates('/3D/public/views/trajet/accueil.mustache'), {});

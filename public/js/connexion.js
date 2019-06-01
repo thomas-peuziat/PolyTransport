@@ -6,14 +6,14 @@ let context = {};
 renderLoginPage(context);
 
 async function renderLoginPage(context) {
-    await renderTemplate(templates('/public/views/login.mustache'), context);
+    await renderTemplate(templates('/3D/public/views/login.mustache'), context);
     
     const submit_btn = document.querySelector('#login-btn');
 
     submit_btn.addEventListener('click', function () {
         const username = document.querySelector('#inputEmail').value;
         const password = document.querySelector('#inputPassword').value;
-        fetch('/api/connexion', {
+        fetch('/3D/api/connexion/', {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
@@ -26,7 +26,7 @@ async function renderLoginPage(context) {
                 response.json()
                 .then((resp) => {
                     if (resp.success) {
-                        document.location.href = '/trajet/accueil';
+                        document.location.href = '/3D/trajet/accueil/';
                     }
                     else {
                         renderLoginPage({...context, message: resp.message});

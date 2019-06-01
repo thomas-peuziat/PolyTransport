@@ -22,8 +22,8 @@ const loadPartials = (() => {
     return async function loadPartials() {
         if (!partials) {
             partials = {
-                navbar: templates('/public/partials/navbar.mustache'),
-                topbar: templates('/public/partials/topbar.mustache'), 
+                navbar: templates('/3D/public/partials/navbar.mustache'),
+                topbar: templates('/3D/public/partials/topbar.mustache'),
             };
             const promises = Object.entries(partials)
                 .map(async function ([k, v]) {
@@ -43,8 +43,6 @@ export async function renderTemplate(template, context) {
     const partials = await loadPartials();
     // On rend le template
     const rendered = Mustache.render(await template, context, partials);
-    //let html = document.querySelector('html');
-    //html.innerHTML = rendered;
     let wrapper = document.querySelector('#wrapper');
     wrapper.innerHTML = rendered;
 

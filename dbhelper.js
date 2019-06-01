@@ -82,10 +82,12 @@ module.exports.trajets = {
         all(`select Id_conducteur, Prix, Heure, Heure_Arrivee, Nb_places, Id_trajet from TRAJET 
             where Id_lieu_depart=${lieuDep} 
               and Id_lieu_arrivee=${lieuArr} 
-              and Heure > ${heure}`),
+              and Heure >= ${heure}`),
     //ATTENTION : vérifier que les id lieux et id_conducteur existent
     create: (etat, note, commentaire, km, prix, etatPaiement, idPaypalPaiement, heureDep, heureArr, idLieuDep, idLieuArr, idConducteur, nbPlace) => run(`INSERT INTO TRAJET (Etat, Note, Commentaire, Kilometres, Prix, Etat_payement, Id_paypal_paiement, Heure, Heure_Arrivee, Id_lieu_depart, Id_lieu_arrivee, Id_conducteur, Nb_places)
     VALUES (${etat}, ${note}, '${commentaire}', ${km}, ${prix}, ${etatPaiement}, '${idPaypalPaiement}', ${heureDep}, '${heureArr}', ${idLieuDep}, ${idLieuArr}, ${idConducteur}, ${nbPlace});`),
+    byIdGetNbPlaces: idTrajet =>get(`select Nb_places from TRAJET where Id_trajet=${idTrajet}`),
+    updateNbPlaces: (idTrajet, nbPlace) => run(`update TRAJET set Nb_places=${nbPlace} where Id_trajet=${idTrajet}`),
 };
 
 module.exports.lieu = {
@@ -98,4 +100,17 @@ module.exports.vehicule = {
     search: (marque, modele, annee) => get(`select Id_vehicule from VEHICULE where Marque = '${marque}' and  Modele = '${modele}' and Annee = ${annee} `),
     create: (marque, modele, annee) => run(`insert into VEHICULE (Marque, Modele, Annee) values ('${marque}', '${modele}', ${annee} )`),
     byId: id => get(`select Marque, Modele, Annee, Image from VEHICULE where Id_vehicule = ${id}`),
+};
+
+module.exports.message = {
+    byUser: (id) => all(`select distinct Id_usr_expediteur, Message_text from Message where Id_usr_expediteur = ${id} or Id_usr_destinataire = ${id}`),
+    byId: (id) => all(`select distinct Id_usr_expediteur, Id_usr_destinataire from Message where Id_usr_expediteur = ${id} or Id_usr_destinataire = ${id}`),
+    getLastMessage: (id_usr, id_ami) => get(`SELECT Message_text, Heure FROM Message WHERE (Id_usr_expediteur = ${id_usr} or Id_usr_destinataire = ${id_usr}) and (Id_usr_expediteur = ${id_ami} or Id_usr_destinataire = ${id_ami}) Order by Heure DESC limit 1;`),
+    getMessages: (id_usr, id_ami) => all(`SELECT Id_usr_expediteur, Id_usr_destinataire, Message_text as text FROM Message WHERE (Id_usr_expediteur = ${id_usr} or Id_usr_destinataire = ${id_usr}) and (Id_usr_expediteur = ${id_ami} or Id_usr_destinataire = ${id_ami}) Order by Heure`),
+    create: (id_expediteur, id_destinataire, msg ) => run(`insert into Message (Id_usr_expediteur, Id_usr_destinataire, Message_text, Heure) values ('${id_expediteur}', '${id_destinataire}', '${msg}', datetime('now') )`),
+
+};
+module.exports.passager = {
+    create: (idUsr, idTrajet) => run(`insert into passager (Id_usr, Id_trajet) values (${idUsr}, ${idTrajet})`),
+    byIds: (idUsr, idTrajet) => get(`select Id_usr from PASSAGER where Id_trajet =${idTrajet} and Id_usr=${idUsr}`),
 };

@@ -17,7 +17,7 @@ module.exports = (passport) => {
     const app = express();
 
     // Point d'entrée pour la connexion
-    app.post('/connexion', function (req, res, next) {
+    app.post('/connexion/', function (req, res, next) {
         if (!req.body.username)
             return res.send({success: false, message: 'empty username'});
         if (!req.body.password)
@@ -40,8 +40,7 @@ module.exports = (passport) => {
         })(req, res, next);
     });
 
-
-    app.post('/inscription', function (req, res, next) {
+    app.post('/inscription/', function (req, res, next) {
         if (!req.body.nom)
             return res.send({success: false, message: 'empty name'});
         if (!req.body.prenom)
@@ -66,7 +65,7 @@ module.exports = (passport) => {
         );
     });
 
-    app.get('/profil/:id_usr', function (req, res, next) {
+    app.get('/profil/:id_usr/', function (req, res, next) {
         dbHelper.users.vehiculeById(req.params.id_usr).then(
             id_vehicule => {
                 if(id_vehicule.Id_vehicule !== null) {
@@ -90,19 +89,14 @@ module.exports = (passport) => {
                         },
                     );
                 }
-
             },
             err => {
                 next(err);
             },
         );
-
-
     });
 
-    app.put('/profil/:id_usr', function (req, res, next) {
-        // if (!req.body.nom || !req.body.prenom || !req.body.email || !req.body.phone || !req.body.DDN)
-        //     return res.send({success: false, message: 'Informations manquantes'});
+    app.put('/profil/:id_usr/', function (req, res, next) {
         if (req.body.marque) {
             dbHelper.vehicule.search(req.body.marque, req.body.modele, req.body.annee).then(result => {
                 let data = JSON.stringify(result);
@@ -160,7 +154,7 @@ module.exports = (passport) => {
         
     });
 
-    app.get('/trajet/:id_trajet', function (req, res, next) {
+    app.get('/trajet/:id_trajet/', function (req, res, next) {
         if(!req.params.id_trajet)
             return res.send({success: false, message: 'Informations manquantes'});
 
@@ -275,9 +269,57 @@ module.exports = (passport) => {
 
     });
 
+    app.post('/trajet/reserver/', function(req, res, next){
+        let idTrajet = req.body.id_trajet;
+
+        //on récupère le nombre de places disponibles et on vérifie que le trajet n'est pas à nous
+        dbHelper.trajets.byId(idTrajet)
+        .then(resultat => {
+            if(resultat.Id_conducteur === req.session.passport.user) {
+                return res.send({success: false, messageErreur: 'Vous ne pouvez pas réserver pour votre trajet'});
+            }
+            if(resultat.Nb_places > 0){
+                dbHelper.passager.byIds(req.session.passport.user, idTrajet)
+                .then(resReq => {
+                    //si l'user a déjà reservé pour ce trajet
+                    if(typeof resReq !== "undefined" && resReq.Id_usr === req.session.passport.user){
+                        return res.send({success: false, messageErreur: 'Vous avez déjà réservé pour ce trajet'});
+                    }
+                    else{
+                        //MAJ du nombre de places disponible
+                        dbHelper.trajets.updateNbPlaces(idTrajet, resultat.Nb_places-1)
+                        .then(()=>{
+                            //on créé un nouveau passager
+                            dbHelper.passager.create(req.session.passport.user, idTrajet)
+                            .then(()=>{
+                                return res.send({success: true, messageValide: 'Réservation effectuée'});
+                            })
+                            .catch(function(error){
+                                return res.send({success: false, messageErreur: 'Erreur1 Base de données '+ error});
+                            });
+                        })
+                        .catch(function(error){
+                            return res.send({success: false, messageErreur: 'Erreur2 Base de données '+ error});
+                        });
+                    }
+                }).catch(function(error){
+                    return res.send({success: false, messageErreur: 'Erreur3 Base de données '+ error});
+                });
+
+            }
+            else{
+                return res.send({success: false, messageErreur: 'Aucune place de libre'});
+
+            }
+        }).catch(function(error){
+            return res.send({success: false, messageErreur: 'Erreur4 Base de données '+ error});
+        });
+
+    });
+
     // Point d'entrée pour la recherche de trajet
     // TODO: Faire en sorte que la recherche ne se fasse pas que sur la ville précise
-    app.get('/search-trajet/:lieu_depart/:lieu_arrivee/:heure_depart', function (req, res, next) {
+    app.get('/search-trajet/:lieu_depart/:lieu_arrivee/:heure_depart/', function (req, res, next) {
         if (!req.params.lieu_depart || !req.params.lieu_arrivee || !req.params.heure_depart)
             return res.send({success: false, message: 'Informations manquantes'});
 
@@ -391,7 +433,7 @@ module.exports = (passport) => {
 
 
     //Point d'entrée pour l'ajout de trajet
-    app.post('/propose-trajet', function(req, res, next){
+    app.post('/propose-trajet/', function(req, res, next){
         if(!req.body.lieu_depart || !req.body.lieu_arrivee || !req.body.prix || !req.body.heure_depart || !req.body.nbPlaces)
             return res.send({success: false, message: 'Informations manquantes'});
         
@@ -465,7 +507,225 @@ module.exports = (passport) => {
         });
 
     });
-    
+
+
+    app.get('/messages/liste-discussions/', function (req, res, next) {
+        let tab_usr = [];
+        let nb_amis = 0; 
+        let promises = [];
+        let promises2 = [];
+        promises.push(
+            new Promise(resolve => {
+                dbHelper.message.byId(req.session.passport.user)
+                .then(idusr => {
+                    idusr.forEach(function (id) {
+                        let found_exp = tab_usr.find(elt => elt === id.Id_usr_expediteur);
+                        if (id.Id_usr_expediteur !== req.session.passport.user  && typeof found_exp === 'undefined' ) {
+                            nb_amis += 1;
+                            tab_usr.push(id.Id_usr_expediteur);
+                        } else {
+                            let found_dest = tab_usr.find(elt => elt === id.Id_usr_destinataire);
+                            if (id.Id_usr_destinataire !== req.session.passport.user  && typeof found_dest === 'undefined' ) {
+                                nb_amis += 1;
+                                tab_usr.push(id.Id_usr_destinataire);
+                            }
+                        }
+
+                    });
+                    
+                    resolve(tab_usr);
+                });
+            })
+        );
+        Promise.all(promises)
+        .then((usr) => {
+            tab_usr = [];
+            let i = 0;
+
+            for (let i = 0; i < usr[0].length; i++) {
+                promises2.push(
+                    new Promise(resolve => {
+                        dbHelper.users.byIdGetName(usr[0][i])
+                        .then(user => {
+                            let data = {
+                                id_usr: usr[0][i],
+                                nom: user.Nom + ' ' + user.Prenom,
+                            };
+                            //tab_usr.push(data);
+                            resolve(data);
+                        });
+                    })
+                );
+            };
+
+            for (let i = 0; i < usr[0].length; i++) {
+                promises2.push(
+                    new Promise(resolve => {
+                        dbHelper.message.getLastMessage(req.session.passport.user, usr[0][i])
+                        .then(data => {
+                            //tab_msg.push({msg: data.Message_text, Heure : data.Heure}); 
+                            resolve({msg: data.Message_text, Heure : data.Heure});
+                        });
+                        
+                    
+                    })
+                );     
+            }               
+
+            Promise.all(promises2)
+            .then((result) => {
+                let messages = [];
+                for (let i = 0; i < nb_amis; i++) {
+                    let data = {
+                        id_usr: result[i].id_usr,
+                        nom: result[i].nom,
+                        msg: result[i+nb_amis].msg, 
+                        Heure : result[i+nb_amis].Heure
+                    }
+                    messages.push(data);
+                }
+                if(messages.length > 0) {
+                    return res.send({
+                        success: true,
+                        messages: messages
+                    });
+                } else {
+                    return res.send({
+                        success: false,
+                        message: 'Aucun message disponible'
+                    });
+                }            
+                
+                },
+                err => {
+                    res.send({success: false, messageErreur: 'bad request'});
+                    next(err);
+                })
+            .catch(function(error){
+                return res.send({success: false, messageErreur: 'Erreur Base de données '+ error});
+            });
+        });
+
+    });
+
+    app.get('/messages/discussion/:id_friend/', function (req, res, next) {
+        let promises = [];
+        dbHelper.message.getMessages(req.session.passport.user, req.params.id_friend)
+        .then( data => {
+            data.forEach( function (msg) {
+                promises.push(
+                    new Promise(resolve => {
+                        if(msg.Id_usr_expediteur === req.session.passport.user)
+                            resolve({me: {text: msg.text}});
+                        else
+                            resolve({friend: {text: msg.text}});
+                    })
+                );
+            });
+
+            Promise.all(promises)
+            .then(messages => {
+                if(messages.length > 0) {
+                    return res.send({
+                        success: true,
+                        message: messages,
+                    });
+                } else {
+                    return res.send({
+                        success: false,
+                        message: 'Aucun message disponible',
+                    });
+                }
+            });
+        });
+    });
+
+    app.post('/trajet/notification/',function (req, res, next){
+        if(!req.body.id_destinataire || !req.body.id_trajet)
+            return res.send({success: false, message: 'Informations manquantes'});
+
+        let idPassager = req.session.passport.user;
+        let idDestinataire = req.body.id_destinataire;
+        let idTrajet = req.body.id_trajet;
+
+        dbHelper.passager.byIds(idPassager, idTrajet)
+            .then(resReq => {
+                //si le passager a bien réservé pour ce trajet
+                if(typeof resReq !== "undefined" && resReq.Id_usr === idPassager){
+
+                    dbHelper.trajets.byId(idTrajet)
+                        .then((resTrajet) => {
+                            if (!resTrajet) {
+                                return res.send({
+                                    success: false,
+                                    message: 'Trajet inexistant'
+                                });
+                            }
+
+                            let promises = [];
+
+                            promises.push(
+                                new Promise(resolve => {
+                                    // Get ville depart
+                                    dbHelper.lieu.byId(resTrajet.Id_lieu_depart)
+                                        .then(function (lieu) {
+                                            resolve(['depart', lieu.Ville]);
+                                        })
+                                })
+                            );
+
+                            promises.push(
+                                new Promise(resolve => {
+                                    // Get ville arrivee
+                                    dbHelper.lieu.byId(resTrajet.Id_lieu_arrivee)
+                                        .then(function (lieu) {
+                                            resolve(['arrivee', lieu.Ville]);
+                                        })
+                                })
+                            );
+
+                            Promise.all(promises)
+                                .then((promisesRes) => {
+                                    let mapRes = new Map(promisesRes);
+                                    let heureDepText = heureIntToText(resTrajet.Heure);
+                                    let heureArrText = heureIntToText(resTrajet.Heure_Arrivee);
+                                    let depart = {
+                                        lieu: mapRes.get('depart'),
+                                        heure: heureDepText
+                                    };
+                                    let arrivee = {
+                                        lieu: mapRes.get('arrivee'),
+                                        heure: heureArrText
+                                    };
+
+                                    dbHelper.users.byIdGetName(idPassager)
+                                        .then((passager) => {
+                                            dbHelper.message.create(idPassager, idDestinataire,
+                                                '[RESERVATION TRAJET ID: ' + idTrajet + '] : ' +
+                                                passager.Prenom + ' ' + passager.Nom +
+                                                ' sera passager pour le trajet de ' + depart.lieu + ' (' + depart.heure + ') ' +
+                                                'vers ' + arrivee.lieu + ' (' + arrivee.heure + ').')
+                                                .then( () => {
+                                                    return res.send({
+                                                        success: true,
+                                                        messageValide: 'Réservation effectuée, notifications envoyées'
+                                                    });
+                                                })
+                                                .catch(function (error) {
+                                                    return res.send({
+                                                        success: false,
+                                                        messageErreur: 'Réservation effectuée, problème notification :' + error
+                                                    });
+                                                });
+                                        });
+                                });
+                        });
+                } else {
+                    return res.send({success: false, messageErreur: 'Erreur, contactez l\'administrateur :)'});
+                }
+            });
+    });
+
     return app;
 
 };
