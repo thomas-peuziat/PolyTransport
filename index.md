@@ -50,7 +50,7 @@ Pour cela, il suffit très simplement de run :
 
 `npm start`
 
-Si aucune erreur, le site est accessible sur `127.0.0.1:8080`
+Si aucune erreur, le site est accessible sur `127.0.0.1:8080/3D/`
 
 
 ## URL / API restful
