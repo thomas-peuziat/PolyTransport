@@ -31,7 +31,7 @@ app.use('/3D/inscription', inscriptionRouter);
 app.use('/3D/trajet/', require('connect-ensure-login').ensureLoggedIn('/3D/connexion/'), trajetRouter);
 app.use('/3D/profil/', require('connect-ensure-login').ensureLoggedIn('/3D/connexion/'), profilRouter);
 app.use('/3D/messages/', require('connect-ensure-login').ensureLoggedIn('/3D/connexion/'), messagesRouter);
-//app.use('/proposertrajet', proposerRouter); //added
+
 
 // Erreur 404
 app.use(function (req, res) {
