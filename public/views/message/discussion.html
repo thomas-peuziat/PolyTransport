@@ -31,36 +31,8 @@
        <script src="/3D/public/js/discussion.js" type="module" defer></script>
 </head>
 <body class="bg-secondary">
-    <div id="wrapper" class="w-100 bg-light">
-        {{>topbar}}
-
-        <a href="">
-            <button type="button" class="ml-3 mt-3 pl-4 pr-4 btn btn-primary go-back">
-                <img src="/3D/public/img/vectorpaint.svg" alt="go_back">
-            </button>
-        </a>
-        <div class="container containerWrapper">
-            {{#message}}
-                {{#me}}
-                    <div class="messageRecu message bg-secondary"><p class="texteMessage text-white">{{text}}</p></div>
-                    <br>
-                {{/me}}
-
-                {{#friend}}
-                    <div class="messageEnvoye message bg-info"><p class="texteMessage text-white">{{text}}</p></div>
-                    <br>
-                {{/friend}}
-            {{/message}}
-       
-            <div class="input-group inputEnvoie">
-                <input type="text" class="form-control">
-                <div class="input-group-append">
-                    <span class="input-group-text"><img src="../../img/baseline-send-24px.svg" alt="send"></span>
-                </div>      
-            </div>
-
-        </div>
-        {{>navbar}}
-    </div>
+<div id="wrapper" class="w-100 bg-light">
+    
+</div>
 </body>
 </html>

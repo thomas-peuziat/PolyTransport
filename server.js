@@ -36,7 +36,7 @@ app.use('/3D/messages/', require('connect-ensure-login').ensureLoggedIn('/3D/con
 // Erreur 404
 app.use(function (req, res) {
     res.status(404).send("<h1>Erreur 404: Route inexistante</h1>" +
-        "<a href='/3D/trajet/accueil'>Retour à l'accueil</a>");
+        "<a href='/3D/trajet/accueil/'>Retour à l'accueil</a>");
 });
 
 let port = 'PORT' in process.env ? process.env.PORT: 8080;

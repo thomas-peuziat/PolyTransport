@@ -15,5 +15,35 @@ async function getMessages(idFriend, context) {
 }
 
 async function renderDiscussionPage(context) {
-    await renderTemplate(templates('/3D/public/views/message/discussion.html'), context);
+    await renderTemplate(templates('/3D/public/views/message/discussion.mustache'), context);
+
+    const input_msg = document.querySelector("#input-msg");
+
+    const input_send = document.querySelector('#envoi-msg');
+    input_send.addEventListener('click', function() {
+        if (input_msg.value !== '') {
+            fetch('/3D/api/messages/discussion/' + id_friend + '/', {
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+                },
+                method: 'POST',
+                body: 'msg=' + encodeURIComponent(input_msg.value),
+            })
+            .then(function (response) {
+                if (response.ok) {
+                    response.json()
+                    .then((resp) => {
+                        if (resp.success) {
+                            getMessages(id_friend, context);
+                        }
+                        else {
+                            getMessages(id_friend, context);
+                        }
+                    });
+                }
+        
+            });
+        }
+    });
 }

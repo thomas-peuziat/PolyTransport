@@ -47,8 +47,6 @@ async function renderProfilPage(context) {
         const modele = document.querySelector('#inputModele').value;
         const annee = document.querySelector('#inputAnnee').value;
 
-        // @TODO : Vehicule
-
         fetch('/3D/api/profil/' + id_usr + '/', {
             headers: {
                 'Accept': 'application/json',
@@ -66,7 +64,7 @@ async function renderProfilPage(context) {
                         getInfoUser(id_usr, {...context, message: resp.message});
                     }
                     else {
-                        renderProfilPage({...context, message: resp.message});
+                        getInfoUser(id_usr, {...context, message: resp.message});
                     }
                 });
             }

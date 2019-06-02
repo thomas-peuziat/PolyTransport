@@ -726,6 +726,22 @@ module.exports = (passport) => {
             });
     });
 
+    app.post('/messages/discussion/:id_friend/', function (req, res, next) {
+        dbHelper.message.create(req.session.passport.user, req.params.id_friend, req.body.msg)
+        .then( () => {
+            return res.send({
+                success: true,
+                messageValide: 'Réservation effectuée'
+            });
+        })
+        .catch(function (error) {
+            return res.send({
+                success: false,
+                messageErreur: 'Réservation effectuée, problème notification :' + error
+            });
+        });
+    });
+
     return app;
 
 };
