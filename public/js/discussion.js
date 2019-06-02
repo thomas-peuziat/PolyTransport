@@ -15,7 +15,7 @@ async function getMessages(idFriend, context) {
 }
 
 async function renderDiscussionPage(context) {
-    await renderTemplate(templates('/3D/public/views/message/discussion.html'), context);
+    await renderTemplate(templates('/3D/public/views/message/discussion.mustache'), context);
 
     const input_msg = document.querySelector("#input-msg");
 
