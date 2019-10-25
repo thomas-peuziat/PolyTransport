@@ -5,7 +5,12 @@
 
 ### Sujet
 
-Projet Web correspondant au sujet n°1 : "Co-voiturage fin de soirée". Le site internet doit permettre la réservation d'un trajet de covoiturage entre 2 lieux différents avec une heure donnée. La base de données actuelles contient des noms de ville et non des lieux de Nantes et alentours (comme cela était demandés par le client. Mais la base de données qui a été conceptualisée ne le permettait pas).
+Projet Web correspondant au sujet n°1 : "Co-voiturage fin de soirée".
+
+Réalisations de projets en collaborations avec d'autres teams, nous étions seulement en charge du développement sur ce projet.
+Le site internet doit permettre la réservation d'un trajet de covoiturage entre 2 lieux différents avec une heure donnée. La base de données actuelles contient des noms de ville et non des lieux de Nantes et alentours (comme cela était demandés par le client. Mais la base de données qui a été conceptualisée ne le permettait pas).
+
+Technologies de développement restreintes (Javascript, Mustache, SQLite3, NodeJS).
 
 ### Réalisations
 
@@ -18,21 +23,13 @@ Projet Web correspondant au sujet n°1 : "Co-voiturage fin de soirée". Le site 
 
 ## Installation
 
-### Téléchargement 
-
-`git clone git@gitlab.univ-nantes.fr:E187321K/polytransport.git`
-
-ou
-
-`git clone https://gitlab.univ-nantes.fr/E187321K/polytransport.git`
-
 ### Base de données
 
 Si besoin de regénérer la base de données, il est nécessaire d'avoir sqlite3.
 
 `sudo apt-get install sqlite3`
 
-puis 
+puis
 
 `npm run createDB`
 
@@ -83,13 +80,13 @@ Si aucune erreur, le site est accessible sur `127.0.0.1:8080/3D/`
 
 ##### Requetes en put
 * /profil/:id_usr/
-    
+
 ### Dépendances
 
 ##### Côté client :
 * Bootstrap
 * Polyfills pour le support de fetch dans les vieux navigateurs
-* jQuery 
+* jQuery
 * Mustache
 
 ##### Côté serveur :
